@@ -1,0 +1,722 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Santa Cruz, Ruta del Papa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Barlow+Condensed:wght@500;600&display=swap">
+<style>
+/* Layout: columna editorial de ~1120px; cada sección es una parada del viaje, con su color de categoría. 60% cal · 30% azul de altura · 10% oro papal. */
+:root{
+  --bg:#F3F5F6;       /* cal de fachada, sesgo frío */
+  --surface:#FFFFFF;
+  --ink:#18263A;
+  --sub:#4F5D6D;
+  --line:#D5DCE3;
+  --jalca:#173A5C;    /* azul cielo de altura: estructura y confianza */
+  --jalca-ink:#FFFFFF;
+  --oro:#9C7208;      /* oro papal para texto sobre claro (contraste AA) */
+  --oro-vivo:#E2B23A; /* oro de acento en botones y marcas */
+  --teja:#A3462D;     /* historia */
+  --musgo:#3D6A4A;    /* naturaleza */
+  --tint:rgba(23,58,92,.06);
+  --f-display:"Cinzel","Trajan Pro",Georgia,serif;
+  --f-body:"Literata",Georgia,"Times New Roman",serif;
+  --f-util:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1824;--surface:#132232;--ink:#E8EEF4;--sub:#A7B4C2;--line:#253A50;--jalca:#9CC3E6;--jalca-ink:#0D1824;
+  --oro:#E8B640;--oro-vivo:#E8B640;--teja:#E08A6C;--musgo:#86C298;--tint:rgba(156,195,230,.07);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1824;--surface:#132232;--ink:#E8EEF4;--sub:#A7B4C2;--line:#253A50;--jalca:#9CC3E6;--jalca-ink:#0D1824;
+  --oro:#E8B640;--oro-vivo:#E8B640;--teja:#E08A6C;--musgo:#86C298;--tint:rgba(156,195,230,.07);color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px}
+@media (min-width:700px){.wrap{padding-inline:28px}}
+a{color:var(--jalca)}
+:focus-visible{outline:3px solid var(--oro-vivo);outline-offset:3px;border-radius:2px}
+img{max-width:100%;display:block}
+h1,h2,h3{text-wrap:balance}
+.eyebrow{font-family:var(--f-util);font-weight:600;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--oro);margin:0}
+h2.sec{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4vw,42px);line-height:1.1;color:var(--jalca);margin:6px 0 12px;letter-spacing:.01em}
+.intro{max-width:62ch;color:var(--sub);margin:0}
+section{padding-block:56px}
+section+section{border-top:1px solid var(--line)}
+.num{font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-util);font-size:14px;letter-spacing:.1em;text-transform:uppercase;padding:2px 10px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+.c-fe{color:var(--oro)}.c-hist{color:var(--teja)}.c-nat{color:var(--musgo)}.c-arq{color:var(--jalca)}
+
+/* Progreso de lectura + barra superior */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--oro-vivo);z-index:60}
+header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.bar .wrap{display:flex;align-items:center;gap:16px;min-height:60px}
+.logo{font-family:var(--f-display);font-weight:700;letter-spacing:.06em;text-decoration:none;color:var(--ink);font-size:17px;white-space:nowrap}
+.logo span{color:var(--oro)}
+.logo .by{display:block;font-family:var(--f-util);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);line-height:1}
+.qori{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.qori .mk{width:52px;height:52px;border-radius:50%;border:2px solid var(--oro-vivo);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;color:var(--oro);font-size:22px}
+.qori b{font-family:var(--f-display);font-size:20px;color:var(--ink);letter-spacing:.04em}
+.qori p{margin:2px 0 0}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);z-index:120;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 16px;font-family:var(--f-util);font-size:16px;box-shadow:0 8px 24px rgba(0,0,0,.18);max-width:calc(100% - 32px)}
+nav.main{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+nav.main a{font-family:var(--f-util);font-size:16px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--sub);padding:8px 10px;border-radius:6px;white-space:nowrap}
+nav.main a:hover{color:var(--ink);background:var(--tint)}
+nav.main a[aria-current="true"]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--oro-vivo)}
+.cta{font-family:var(--f-util);font-weight:600;font-size:16px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--oro-vivo);color:#1B1505;
+  padding:10px 16px;border-radius:8px;white-space:nowrap;display:inline-flex;align-items:center;gap:8px;min-height:44px;border:0;cursor:pointer}
+.cta:hover{filter:brightness(1.06)}
+.ghost{font-family:var(--f-util);font-weight:600;font-size:16px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);
+  padding:10px 16px;border-radius:8px;display:inline-flex;align-items:center;min-height:44px;cursor:pointer}
+.ghost:hover{border-color:var(--oro-vivo)}
+@media (max-width:860px){nav.main{display:none}.bar .cta{margin-left:auto}}
+
+/* Hero */
+.hero{padding-block:40px 48px}
+.hero .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.hero h1{font-family:var(--f-display);font-weight:700;font-size:clamp(38px,6vw,68px);line-height:1.02;margin:10px 0 18px;color:var(--ink);letter-spacing:.01em}
+.hero h1 em{font-style:normal;color:var(--oro)}
+.hero p.lead{font-size:19px;max-width:44ch;margin:0 0 22px}
+.hero .actions{display:flex;gap:10px;flex-wrap:wrap}
+.collage{position:relative;aspect-ratio:1/1;max-width:100%}
+.collage figure{position:absolute;margin:0;overflow:hidden;border-radius:4px;box-shadow:0 14px 34px rgba(13,24,36,.22)}
+.collage img{width:100%;height:100%;object-fit:cover}
+.collage .a{inset:0 18% 26% 0}
+.collage .b{right:0;bottom:0;width:52%;height:46%;border:6px solid var(--bg)}
+.collage .stamp{position:absolute;left:6%;bottom:4%;width:112px;height:112px;border-radius:50%;background:#173A5C;color:#FFFFFF;display:grid;place-items:center;text-align:center;
+  font-family:var(--f-display);font-weight:700;line-height:1.05;font-size:15px;border:3px solid var(--oro-vivo)}
+.collage .stamp b{display:block;font-size:30px;color:#E8B640}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:40px;border-block:1px solid var(--line)}
+.facts div{padding:14px 16px;border-left:1px solid var(--line);min-width:0}
+.facts div:first-child{border-left:0}
+.facts b{display:block;font-family:var(--f-util);font-weight:600;font-size:clamp(24px,3vw,32px);color:var(--jalca);line-height:1.1;font-variant-numeric:tabular-nums}
+.facts span{font-size:14px;color:var(--sub)}
+@media (max-width:860px){.hero .grid{grid-template-columns:1fr}.collage{max-width:520px}.facts{grid-template-columns:repeat(2,1fr)}.facts div:nth-child(3){border-left:0}.facts div:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* Cuenta regresiva */
+.count{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin:0 0 22px}
+.count .u{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:72px;text-align:center}
+.count .u b{display:block;font-family:var(--f-util);font-size:30px;font-weight:600;line-height:1;color:var(--jalca);font-variant-numeric:tabular-nums}
+.count .u span{font-family:var(--f-util);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub)}
+.count .msg{align-self:center;font-family:var(--f-util);font-size:16px;letter-spacing:.04em;color:var(--sub)}
+
+/* Programa + vuelo */
+.prog-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:40px;margin-top:28px;align-items:start}
+@media (max-width:860px){.prog-grid{grid-template-columns:1fr}}
+ol.prog{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+ol.prog li{position:relative;display:grid;grid-template-columns:64px 1fr;gap:2px 14px;padding:10px 12px 10px 18px}
+ol.prog li::before{content:"";position:absolute;left:-8px;top:17px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--sub)}
+ol.prog li.sc{background:color-mix(in srgb,var(--oro-vivo) 13%,transparent);border-radius:0 8px 8px 0}
+ol.prog li.sc::before{background:var(--oro-vivo);border-color:var(--oro-vivo)}
+ol.prog time{font-family:var(--f-util);font-weight:600;font-size:22px;color:var(--jalca);font-variant-numeric:tabular-nums;line-height:1.3}
+ol.prog .w{font-weight:600}
+ol.prog .p{grid-column:2;color:var(--sub);font-size:15px}
+.flight{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 18px 12px}
+.flight h3{font-family:var(--f-util);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:16px;margin:0 0 6px;color:var(--ink)}
+.flight svg{width:100%;height:auto;display:block}
+.flight .cap{font-size:14px;color:var(--sub);margin:6px 0 0}
+.note{font-size:14px;color:var(--sub)}
+
+/* Historia de Prevost */
+.prev{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;margin-top:24px}
+@media (max-width:860px){.prev{grid-template-columns:1fr}}
+.prev figure{margin:0}
+.prev figure img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:4px}
+figcaption{font-family:var(--f-util);font-size:14px;letter-spacing:.05em;color:var(--sub);margin-top:6px}
+blockquote.q{margin:22px 0;padding:6px 0 6px 20px;border-left:3px solid var(--oro-vivo);font-size:22px;line-height:1.4;font-style:italic}
+blockquote.q cite{display:block;font-style:normal;font-family:var(--f-util);font-size:15px;letter-spacing:.06em;color:var(--sub);margin-top:8px}
+.years{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;padding:0;list-style:none}
+.years li{font-size:15px}.years b{font-family:var(--f-util);font-size:18px;color:var(--jalca);margin-right:6px;font-variant-numeric:tabular-nums}
+
+/* Paseo: paradas numeradas */
+.stops{list-style:none;padding:0;margin:32px 0 0;display:flex;flex-direction:column;gap:36px;counter-reset:s}
+.stop{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;counter-increment:s}
+.stop:nth-child(even) .ph{order:2}
+.stop .ph{position:relative;margin:0}
+.stop .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;cursor:zoom-in}
+.stop .ph::after{content:counter(s);position:absolute;top:-14px;left:-10px;width:44px;height:44px;border-radius:50%;background:var(--jalca);color:var(--jalca-ink);
+  font-family:var(--f-display);font-weight:700;font-size:20px;display:grid;place-items:center;border:3px solid var(--bg)}
+.stop h3{font-family:var(--f-display);font-size:26px;line-height:1.15;margin:6px 0 8px;color:var(--ink)}
+.stop p{margin:0 0 8px;max-width:52ch}
+.stop .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+@media (max-width:760px){.stop{grid-template-columns:1fr;gap:14px}.stop:nth-child(even) .ph{order:0}}
+
+/* Ayer y hoy */
+.then{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
+.then figure{margin:0}.then img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:3px;cursor:zoom-in;filter:sepia(.15)}
+@media (max-width:760px){.then{grid-template-columns:repeat(2,1fr)}}
+.curio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.curio div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.curio b{font-family:var(--f-display);font-size:28px;color:var(--teja);display:block;line-height:1.1}
+.curio p{margin:6px 0 0;font-size:15px}
+@media (max-width:760px){.curio{grid-template-columns:1fr}}
+
+/* Alrededores: filtros + tarjetas */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.filters button{font-family:var(--f-util);font-size:16px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;min-height:42px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--jalca);color:var(--jalca-ink);border-color:var(--jalca)}
+.filters .count-f{align-self:center;font-family:var(--f-util);color:var(--sub);font-size:15px;margin-left:4px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
+@media (max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.card img{width:100%;aspect-ratio:3/2;object-fit:cover;cursor:zoom-in}
+.card .b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.card .km{font-family:var(--f-util);font-weight:600;font-size:16px;color:var(--sub);font-variant-numeric:tabular-nums}
+.card h3{font-family:var(--f-display);font-size:21px;line-height:1.2;margin:2px 0 0}
+.card p{margin:0;font-size:15.5px}
+.card .tip{margin-top:auto;padding-top:8px;font-size:14px;color:var(--sub);border-top:1px dashed var(--line)}
+
+/* Galería */
+.gal{columns:4 220px;column-gap:12px;margin-top:24px}
+.gal button{all:unset;display:block;margin:0 0 12px;break-inside:avoid;cursor:zoom-in;position:relative;border-radius:4px;overflow:hidden}
+.gal button:focus-visible{outline:3px solid var(--oro-vivo)}
+.gal img{width:100%;height:auto;transition:transform .4s}
+.gal button:hover img{transform:scale(1.03)}
+.gal span{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 8px;font-family:var(--f-util);font-size:14px;letter-spacing:.04em;color:#fff;background:linear-gradient(transparent,rgba(10,20,32,.75))}
+
+/* Lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(8,15,24,.94);display:grid;grid-template-rows:auto 1fr auto;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px calc(env(safe-area-inset-bottom,0px) + 14px)}
+.lb .hd{display:flex;justify-content:space-between;align-items:center;color:#DDE6EF;font-family:var(--f-util);letter-spacing:.06em;font-size:16px}
+.lb .st{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;min-height:0}
+.lb img{max-height:calc(100vh - 170px);max-width:100%;margin:auto;object-fit:contain;border-radius:3px}
+.lb button{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:50%;width:48px;height:48px;font-size:22px;cursor:pointer}
+.lb button:hover{border-color:#E8B640;color:#E8B640}
+.lb .cp{color:#E8EEF4;text-align:center;font-size:16px;margin-top:8px}
+
+/* Viajero */
+.trav{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px}
+@media (max-width:860px){.trav{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;min-width:0}
+.panel h3{font-family:var(--f-util);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:17px;margin:0 0 12px}
+.routes{display:flex;flex-direction:column;gap:14px}
+.routes div{display:grid;grid-template-columns:64px 1fr;gap:12px}
+.routes b{font-family:var(--f-util);font-size:24px;color:var(--jalca);font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
+.routes p{margin:0;font-size:15.5px}
+.routes strong{display:block}
+.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15.5px;padding:4px 0}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--jalca);flex:none}
+.check input:checked+span{text-decoration:line-through;color:var(--sub)}
+.meter{height:6px;border-radius:3px;background:var(--line);margin:12px 0 6px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--oro-vivo);transition:width .3s}
+.tbl{overflow-x:auto}
+table.cal{border-collapse:collapse;width:100%;font-size:15.5px}
+table.cal td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.cal td:first-child{font-family:var(--f-util);font-weight:600;color:var(--jalca);white-space:nowrap;font-variant-numeric:tabular-nums;font-size:17px}
+table.cal tr.hl td{background:color-mix(in srgb,var(--oro-vivo) 14%,transparent)}
+details.faq{border-bottom:1px solid var(--line);padding:12px 0}
+details.faq summary{cursor:pointer;font-weight:600;list-style-position:outside}
+details.faq p{margin:8px 0 0;color:var(--sub);font-size:15.5px}
+
+/* Libro CTA */
+.bookcta{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;background:var(--jalca);color:var(--jalca-ink);border-radius:12px;padding:24px 28px}
+.bookcta h3{font-family:var(--f-display);font-size:26px;margin:0 0 4px}
+.bookcta p{margin:0;opacity:.9}
+.bookcta .mini{width:84px;height:112px;border-radius:2px 6px 6px 2px;background:url(img/valle.jpg) center/cover;box-shadow:inset 8px 0 10px -6px rgba(0,0,0,.5),0 8px 18px rgba(0,0,0,.3);position:relative}
+.bookcta .mini::after{content:"XIV";position:absolute;inset:auto 0 10px 0;text-align:center;font-family:var(--f-display);color:#E8B640;font-weight:700}
+@media (max-width:700px){.bookcta{grid-template-columns:1fr}.bookcta .mini{display:none}}
+
+/* Diseño */
+details.design{margin-top:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+details.design summary{cursor:pointer;font-family:var(--f-util);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:16px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:16px}
+@media (max-width:760px){.dgrid{grid-template-columns:1fr}}
+.dgrid h4{font-family:var(--f-util);letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px;font-size:15px;color:var(--oro)}
+.dgrid ul{margin:0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:6px}
+.sw{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.sw span{display:flex;align-items:center;gap:6px;font-family:var(--f-util);font-size:14px}
+.sw i{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:inline-block}
+
+footer.foot{padding-block:40px 56px;border-top:1px solid var(--line);font-size:14.5px;color:var(--sub)}
+footer.foot ul{padding-left:18px;margin:8px 0 0;display:flex;flex-direction:column;gap:4px}
+.totop{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:40;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gal img{transition:none}}
+</style>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#inicio">Succhabamba <span>· XIV</span><small class="by">por QORI Soluciones</small></a>
+    <nav class="main" aria-label="Secciones">
+      <a href="#visita">La visita</a>
+      <a href="#prevost">Prevost</a>
+      <a href="#ciudad">La ciudad</a>
+      <a href="#alrededores">Alrededores</a>
+      <a href="#galeria">Galería</a>
+      <a href="#viajero">Viajero</a>
+    </nav>
+    <a class="cta" href="libro.html">Abrir el libro</a>
+  </div>
+</header>
+
+<main id="inicio">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <p class="eyebrow">Santa Cruz de Succhabamba · Cajamarca · 2 035 m s. n. m.</p>
+        <h1>Bienvenido a casa, <em>León XIV</em></h1>
+        <p class="lead">El sábado 14 de noviembre de 2026 el Papa vuelve a la provincia que recorrió como obispo de Chiclayo. Esta guía te lleva por su ruta, por la ciudad de la Cruz de Succha y por los caminos de alrededor.</p>
+        <div class="count" id="count" aria-live="polite">
+          <div class="u"><b id="cd-d">—</b><span>días</span></div>
+          <div class="u"><b id="cd-h">—</b><span>horas</span></div>
+          <div class="u"><b id="cd-m">—</b><span>min</span></div>
+          <div class="msg" id="cd-msg">para la misa de las 11:00</div>
+        </div>
+        <div class="actions">
+          <a class="cta" href="#visita">Ver la ruta del Papa</a>
+          <a class="ghost" href="libro.html">Leer la guía como libro</a>
+          <button class="ghost pdf-btn" type="button" hidden>Descargar PDF</button>
+        </div>
+      </div>
+      <div class="collage">
+        <figure class="a"><img src="img/plaza.jpg" alt="Plaza de Armas de Santa Cruz con palmeras y la glorieta" data-lb="Plaza de Armas de Santa Cruz"></figure>
+        <figure class="b"><img src="img/cotorumi.jpg" alt="Cruz del mirador Cotorumi sobre el valle" data-lb="Mirador Cotorumi"></figure>
+        <div class="stamp"><div><b>14</b>NOV<br>2026</div></div>
+      </div>
+    </div>
+    <div class="facts">
+      <div><b>09:50</b><span>Llega en helicóptero desde Chiclayo</span></div>
+      <div><b>11:00</b><span>Santa Misa en la explanada</span></div>
+      <div><b>100 000+</b><span>Peregrinos esperados</span></div>
+      <div><b>1549</b><span>Año de la Cruz de Succha</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- VISITA -->
+<section id="visita">
+  <div class="wrap">
+    <p class="eyebrow">Sábado 14 de noviembre · programa oficial</p>
+    <h2 class="sec">La ruta del Papa</h2>
+    <p class="intro">El día empieza en la catedral de Chiclayo y sube a la sierra por el aire. El tramo en Santa Cruz dura unas tres horas y media; está marcado en dorado.</p>
+    <div class="prog-grid">
+      <ol class="prog">
+        <li><time>08:00</time><span class="w">Coronación de la Virgen Inmaculada</span><span class="p">Catedral Santa María, Chiclayo</span></li>
+        <li class="sc"><time>09:10</time><span class="w">Sale en helicóptero</span><span class="p">Base Aérea de Chiclayo</span></li>
+        <li class="sc"><time>09:50</time><span class="w">Llega a Santa Cruz</span><span class="p">Helipuerto de Santa Cruz de Succhabamba</span></li>
+        <li class="sc"><time>11:00</time><span class="w">Santa Misa</span><span class="p">Explanada de Santa Cruz de Succhabamba</span></li>
+        <li class="sc"><time>13:15</time><span class="w">Retorno en helicóptero</span><span class="p">Helipuerto de Santa Cruz</span></li>
+        <li><time>14:00</time><span class="w">Llega a Chiclayo</span><span class="p">Base Aérea Pedro Ruiz Gallo</span></li>
+        <li><time>17:30</time><span class="w">Clausura del Año Jubilar</span><span class="p">Santuario de Santo Toribio de Mogrovejo</span></li>
+      </ol>
+      <div class="flight">
+        <h3>De la costa a la sierra en 40 minutos</h3>
+        <svg viewBox="0 0 560 262" role="img" aria-labelledby="fl-t">
+          <title id="fl-t">Esquema del vuelo en helicóptero: Chiclayo a 29 metros de altitud, Santa Cruz a 2 035 metros; salida 09:10, llegada 09:50.</title>
+          <!-- escala vertical: 0 m en y=220, 2500 m en y=40 -> 0.072 px por metro -->
+          <g font-family="Barlow Condensed, Arial Narrow, sans-serif" font-size="13" fill="currentColor" style="color:var(--sub)">
+            <line x1="40" y1="220" x2="540" y2="220" stroke="var(--line)"/>
+            <line x1="40" y1="148" x2="540" y2="148" stroke="var(--line)" stroke-dasharray="2 4"/>
+            <line x1="40" y1="76" x2="540" y2="76" stroke="var(--line)" stroke-dasharray="2 4"/>
+            <text x="36" y="224" text-anchor="end">0</text>
+            <text x="36" y="152" text-anchor="end">1 000</text>
+            <text x="36" y="80" text-anchor="end">2 000</text>
+            <text x="36" y="36" text-anchor="end">m</text>
+          </g>
+          <path d="M40 218 L120 216 L190 212 L250 200 L300 176 L340 150 L370 112 L400 98 L430 120 L460 92 L490 74 L540 70 L540 220 L40 220 Z" fill="var(--tint)" stroke="none"/>
+          <path d="M40 218 L120 216 L190 212 L250 200 L300 176 L340 150 L370 112 L400 98 L430 120 L460 92 L490 74 L540 70" fill="none" stroke="var(--musgo)" stroke-width="2"/>
+          <path d="M60 214 C 180 120, 360 30, 492 70" fill="none" stroke="var(--oro-vivo)" stroke-width="2.5" stroke-dasharray="7 6"/>
+          <circle cx="60" cy="216" r="6" fill="var(--jalca)"/>
+          <circle cx="492" cy="73" r="7" fill="var(--oro-vivo)" stroke="var(--surface)" stroke-width="2"/>
+          <g font-family="Barlow Condensed, Arial Narrow, sans-serif" fill="var(--ink)">
+            <text x="56" y="242" font-size="15" font-weight="600">Chiclayo · 29 m</text>
+            <text x="56" y="256" font-size="13" fill="var(--sub)">sale 09:10</text>
+            <text x="540" y="50" font-size="15" font-weight="600" text-anchor="end">Santa Cruz · 2 035 m</text>
+            <text x="540" y="36" font-size="13" text-anchor="end" fill="var(--sub)">llega 09:50</text>
+          </g>
+        </svg>
+        <p class="cap">Esquema, no a escala horizontal. Por tierra el mismo trayecto toma unas 4 horas.</p>
+      </div>
+    </div>
+
+    <div class="prev" style="margin-top:48px">
+      <figure><img src="img/plaza-aerea.jpg" alt="Vista aérea de la plaza y los techos de teja de Santa Cruz" data-lb="La ciudad desde el aire"><figcaption>La ciudad desde el aire: techos de teja y la plaza principal.</figcaption></figure>
+      <div>
+        <p class="eyebrow">Dónde será la misa</p>
+        <h3 style="font-family:var(--f-display);font-size:28px;line-height:1.15;margin:6px 0 10px;color:var(--ink)">Del aeródromo de 1942 a la explanada del Papa</h3>
+        <p>Las autoridades preparan para la misa el antiguo campo de aviación, un terreno de unas 23 hectáreas. En 1938 el aviador Juan Pardo y Miguel aterrizó aquí con su avioneta <i>El Pajarito</i> y propuso la planicie como aeródromo de emergencia. El aeródromo «Leoncio Prado» se inauguró el 27 de setiembre de 1942.</p>
+        <p>Se esperan entre 100 000 y 200 000 peregrinos en una provincia de unos 35 000 habitantes. Los vecinos están preparando sus casas como hospedaje.</p>
+        <p class="note">Sigue los accesos y horarios que anuncien las autoridades y la diócesis de Chiclayo; pueden cambiar en los últimos días.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVOST -->
+<section id="prevost">
+  <div class="wrap">
+    <p class="eyebrow">Por qué Santa Cruz</p>
+    <h2 class="sec">El obispo que subía a la sierra</h2>
+    <div class="prev">
+      <div>
+        <p>Santa Cruz es parte del departamento de Cajamarca, pero en lo eclesiástico pertenece a la diócesis de Chiclayo. Entre 2014 y 2023 su pastor fue Robert Francis Prevost, agustino, hoy León XIV.</p>
+        <p>En esos años recorrió los distritos cruceños. Presidió las fiestas del Señor del Costado y de la Virgen de los Remedios, celebró bautizos y confirmaciones, y ordenó sacerdote al actual párroco de la ciudad. Al despedirse prometió volver.</p>
+        <blockquote class="q">«Prometió volver a Santa Cruz, pero jamás imaginamos que regresaría a su casa como Papa.»<cite>P. Wildor Cubas Julca, párroco de Santa Cruz</cite></blockquote>
+        <ul class="years">
+          <li><b>2014</b>Administrador apostólico de Chiclayo</li>
+          <li><b>2015</b>Obispo de Chiclayo</li>
+          <li><b>2016</b>Erige el Santuario de Liscan</li>
+          <li><b>2025</b>Elegido Papa</li>
+          <li><b>2026</b>Vuelve a Santa Cruz</li>
+        </ul>
+      </div>
+      <figure>
+        <img src="img/liscan.jpg" alt="Santuario de la Virgen de los Remedios en Liscan, con sus torres y pasarela" data-lb="Santuario de la Virgen de los Remedios · Liscan, Pulán">
+        <figcaption>Santuario de la Virgen de los Remedios, Liscan (Pulán). Prevost lo erigió como Santuario Diocesano por el Decreto N.º 063 del 11 de noviembre de 2016. Su fiesta es del 17 al 21 de noviembre, días después de la visita.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- CIUDAD -->
+<section id="ciudad">
+  <div class="wrap">
+    <p class="eyebrow c-hist" style="color:var(--teja)">Recorrido a pie · unas 2 horas</p>
+    <h2 class="sec">La ciudad de la cruz de carrizo</h2>
+    <p class="intro">El 3 de mayo de 1549, cuenta la tradición, un labriego encontró una cruz de <i>succha</i> (carrizo) en una laguna de la pampa. Santa Cruz de Succhabamba nació donde volvía a aparecer la cruz. Este paseo une sus lugares en el orden en que conviene caminarlos.</p>
+    <ol class="stops">
+      <li class="stop">
+        <figure class="ph"><img src="img/glorieta.jpg" alt="Glorieta blanca de la plaza de Santa Cruz" data-lb="Plaza de Armas y glorieta"></figure>
+        <div><span class="chip c-fe">Fe · punto de partida</span><h3>Plaza de Armas</h3><p>Palmeras, la glorieta y las casonas blancas alrededor. Es el corazón de la fiesta del Señor del Costado y el mejor lugar para orientarte el día que llegues.</p></div>
+      </li>
+      <li class="stop">
+        <figure class="ph"><img src="img/iglesia.jpg" alt="Iglesia La Inmaculada de Santa Cruz, fachada celeste" data-lb="Iglesia La Inmaculada"></figure>
+        <div><span class="chip c-fe">Fe</span><h3>Iglesia La Inmaculada y el Señor del Costado</h3>
+          <p>Aquí está el patrón de la ciudad: un Cristo resucitado de cedro, de 1,70 m, que llegó el 28 de setiembre de 1674 en un cajón cargado por una mula sin arriero. Nadie lo reclamó y el pueblo lo hizo suyo.</p>
+          <p>En el atrio, la <b>Virgen Roja</b>: 2,40 m tallados por la escultora Ana Mescaño en una piedra roja del cerro Cotorumi.</p></div>
+      </li>
+      <li class="stop">
+        <figure class="ph"><img src="img/casona.jpg" alt="Casona de dos pisos con balcón corrido de madera" data-lb="Casona con balcón corrido"></figure>
+        <div><span class="chip c-hist">Historia</span><h3>Calles coloniales y la Municipalidad</h3>
+          <p>Casonas de adobe con el primer piso de 3 a 4 m, balcones corridos de madera y techos de teja. Zócalos y veredas de piedra blanca del Cotorumi.</p>
+          <p>La Municipalidad ocupa el antiguo Cabildo de 1801. Mira el reloj de su torre: escribe el cuatro como <b>IIII</b>. Viene de la iglesia colonial demolida hacia 1964.</p></div>
+      </li>
+      <li class="stop">
+        <figure class="ph"><img src="img/puente-colon.jpg" alt="Puente Colón, arco de piedra entre vegetación" data-lb="Puente Colón"></figure>
+        <div><span class="chip c-hist">Historia · a 2 cuadras</span><h3>Puente Colón</h3>
+          <p>Un arco de piedra blanca sobre la quebrada El Pueblo, al inicio del Jr. Cutervo. Lo levantó el maestro picapedrero Eusebio Bustamante, uniendo las piedras con calicanto: cal, miel y miles de huevos.</p>
+          <p class="note">Las fuentes locales fechan la obra entre 1935 y 1948. Es el único de su tipo en la provincia.</p></div>
+      </li>
+      <li class="stop">
+        <figure class="ph"><img src="img/cotorumi.jpg" alt="Gran cruz blanca del mirador Cotorumi" data-lb="Mirador Cotorumi"></figure>
+        <div><span class="chip c-fe">Fe · mirador</span><h3>Mirador Cotorumi</h3>
+          <p>La réplica de la Cruz de Succha vigila la ciudad desde el cerro de la piedra blanca. Sube al atardecer: verás los techos, el valle y la explanada de la misa.</p></div>
+      </li>
+      <li class="stop">
+        <figure class="ph"><img src="img/valle.jpg" alt="Valle de Santa Cruz con la ciudad al fondo" data-lb="El valle de Santa Cruz"></figure>
+        <div><span class="chip c-fe">La visita</span><h3>La explanada</h3>
+          <p>El antiguo campo de aviación, escenario de la misa del 14 de noviembre. Llega temprano, con agua, abrigo para la lluvia y un punto de reencuentro acordado con tu grupo.</p></div>
+      </li>
+    </ol>
+
+    <h3 class="eyebrow" style="margin-top:56px;color:var(--teja)">Santa Cruz del ayer</h3>
+    <div class="then">
+      <figure><img src="img/plaza-1951.jpg" alt="Plaza de Santa Cruz en 1951" data-lb="Plaza de Santa Cruz, 1951"><figcaption>Plaza, 1951</figcaption></figure>
+      <figure><img src="img/iglesia-1962.jpg" alt="Plaza e iglesia La Inmaculada en 1962" data-lb="Plaza de Armas e iglesia La Inmaculada, 1962"><figcaption>Plaza e iglesia, 1962</figcaption></figure>
+      <figure><img src="img/municipio-1920.jpg" alt="Antiguo local municipal hacia 1920" data-lb="Antiguo local de la Municipalidad, 1920"><figcaption>Municipalidad, 1920</figcaption></figure>
+      <figure><img src="img/calle-ugaz.jpg" alt="Calle Juan Ugaz con palmeras, foto antigua coloreada" data-lb="Calle Juan Ugaz"><figcaption>Calle Juan Ugaz</figcaption></figure>
+    </div>
+    <div class="curio">
+      <div><b>1596</b><p>Santo Toribio de Mogrovejo pasa por la aldea y confirma a 332 personas. Otro pastor de la sierra norte, 430 años antes.</p></div>
+      <div><b>1823</b><p>Simón Bolívar visita la villa el 12 de diciembre. Muchos cruceños se enrolan en el ejército libertador.</p></div>
+      <div><b>1950</b><p>La Ley 11328 crea la provincia de Santa Cruz el 21 de abril, tras más de treinta años de gestiones.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ALREDEDORES -->
+<section id="alrededores">
+  <div class="wrap">
+    <p class="eyebrow">Para quedarte un día más</p>
+    <h2 class="sec">Alrededores y provincia</h2>
+    <p class="intro">De los 285 a los 3 600 metros de altitud, once distritos guardan termas, grutas, bosques de neblina y sitios pre incas. Filtra por lo que te interesa.</p>
+    <div class="filters" role="group" aria-label="Filtrar lugares">
+      <button type="button" aria-pressed="true" data-f="all">Todos</button>
+      <button type="button" aria-pressed="false" data-f="fe">Fe</button>
+      <button type="button" aria-pressed="false" data-f="hist">Historia</button>
+      <button type="button" aria-pressed="false" data-f="nat">Naturaleza</button>
+      <button type="button" aria-pressed="false" data-f="arq">Arqueología</button>
+      <span class="count-f" id="count-f" aria-live="polite"></span>
+    </div>
+    <div class="cards" id="cards">
+      <article class="card" data-c="hist nat"><img src="img/guacamayo.jpg" alt="Guacamayo en el parque Llacta Sapuy" data-lb="Llacta Sapuy"><div class="b">
+        <div class="top"><span class="chip c-hist">Historia</span><span class="km">Cerca de la ciudad</span></div>
+        <h3>Llacta Sapuy</h3><p>Asentamiento indígena donde llegó una avanzada de Pizarro el 10 de noviembre de 1532. Hoy, parque municipal con vivero y mini zoológico.</p>
+        <p class="tip">Ideal con niños mientras esperas la misa.</p></div></article>
+      <article class="card" data-c="arq"><img src="img/cerro-tren.jpg" alt="Meseta del Cerro Tren" data-lb="Cerro Hatun Circa o Cerro Tren"><div class="b">
+        <div class="top"><span class="chip c-arq">Arqueología</span><span class="km">4,5 km</span></div>
+        <h3>Cerro Hatun Circa (Cerro Tren)</h3><p>«Cerro alto» en quechua. Pozos rituales tallados en roca, cerámica en la cima y un reloj de piedra cuya sombra marca las 11:00.</p>
+        <p class="tip">Caserío Atumpampa. Terreno privado: pide permiso.</p></div></article>
+      <article class="card" data-c="arq"><img src="img/ventanillas.jpg" alt="Nichos funerarios de Las Ventanillas" data-lb="Las Ventanillas"><div class="b">
+        <div class="top"><span class="chip c-arq">Arqueología</span><span class="km">6–8 km</span></div>
+        <h3>Las Ventanillas</h3><p>Más de cincuenta nichos funerarios de barro y piedra en los acantilados, cementerios asociados al Hatun Circa.</p>
+        <p class="tip">Muy dañados por huaqueros. Ve con guía y no toques restos.</p></div></article>
+      <article class="card" data-c="nat"><img src="img/platanar-catarata.jpg" alt="Catarata en el bosque de Platanar" data-lb="Catarata Pac Chac, Platanar"><div class="b">
+        <div class="top"><span class="chip c-nat">Naturaleza</span><span class="km">9 km</span></div>
+        <h3>Platanar</h3><p>Bosque natural con la catarata Pac Chac, la cueva de los Murciélagos y el puente Priana, arco natural sobre el cañón del Chancay.</p>
+        <p class="tip">Vía a Chota hasta el km 7,5; luego 1,5 km afirmado y 30–40 min a pie.</p></div></article>
+      <article class="card" data-c="nat hist"><img src="img/chancay.jpg" alt="Complejo termal de Chancay Baños" data-lb="Baños termales de Chancay Baños"><div class="b">
+        <div class="top"><span class="chip c-nat">Naturaleza</span><span class="km">Chancay Baños</span></div>
+        <h3>Aguas termales</h3><p>Brotan a 35–40 °C de una falla geológica, en una zona reservada de 2 628 ha. Cerca, las pampas de Montán, donde se dio la batalla de 1882.</p>
+        <p class="tip">Dos piscinas comunitarias y 27 pozos individuales.</p></div></article>
+      <article class="card" data-c="nat"><img src="img/gruta-laguna.jpg" alt="Laguna turquesa dentro de la gruta de Ushcupishgo" data-lb="Grutas de Ushcupishgo, Ninabamba"><div class="b">
+        <div class="top"><span class="chip c-nat">Naturaleza</span><span class="km">Ninabamba</span></div>
+        <h3>Grutas de Ushcupishgo</h3><p>Galerías con lagunas turquesas, el Tragadero o Boca del Diablo y la laguna Santa Lucía. La tradición dice que las visitaron Humboldt y Raimondi.</p>
+        <p class="tip">Solo con guía, casco y linterna.</p></div></article>
+      <article class="card" data-c="nat arq"><img src="img/bosque-petrificado.jpg" alt="Tronco petrificado en Piedra Chamana" data-lb="Bosque petrificado Piedra Chamana, Sexi"><div class="b">
+        <div class="top"><span class="chip c-nat">Naturaleza</span><span class="km">Sexi · 2 495 m</span></div>
+        <h3>Piedra Chamana</h3><p>Troncos convertidos en piedra. Patrimonio Cultural de la Nación desde 1997; no hay otra zona de fósiles vegetales así en el Perú.</p>
+        <p class="tip">Llévate solo fotos. En Sexi tejen sombreros de paja.</p></div></article>
+      <article class="card" data-c="arq nat"><img src="img/poro-poro-2.jpg" alt="Piedra tallada con pocitos en Poro Poro" data-lb="Centro arqueológico Poro Poro, Udima"><div class="b">
+        <div class="top"><span class="chip c-arq">Arqueología</span><span class="km">Catache · Udima</span></div>
+        <h3>Poro Poro y Udima</h3><p>Santuario del culto al agua con altares de piedra y canales. Lo rodean los Bosques Nublados de Udima, 12 183,20 ha con 11 aves endémicas.</p>
+        <p class="tip">Catache celebra a San Agustín, santo de la orden del Papa.</p></div></article>
+      <article class="card" data-c="fe nat"><img src="img/chorro-blanco.jpg" alt="Catarata Chorro Blanco en Pulán" data-lb="Catarata Chorro Blanco, Pulán"><div class="b">
+        <div class="top"><span class="chip c-fe">Fe</span><span class="km">Pulán</span></div>
+        <h3>Liscan y Chorro Blanco</h3><p>El «distrito de las cataratas» guarda el Santuario de la Virgen de los Remedios, aparecida en un puquio. Los fieles se llevan su agua.</p>
+        <p class="tip">Fiesta del 17 al 21 de noviembre.</p></div></article>
+    </div>
+
+    <div class="bookcta" style="margin-top:44px">
+      <div class="mini" aria-hidden="true"></div>
+      <div><h3>Todo esto, en un libro que se hojea</h3><p>Cinco capítulos, 36 páginas, índice, glosario y lista del peregrino. Hojéalo aquí o descárgalo en PDF para leerlo sin conexión en el viaje.</p></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><a class="cta" href="libro.html">Abrir el libro</a><button class="ghost pdf-btn" type="button" hidden style="background:transparent;color:var(--jalca-ink);border-color:rgba(255,255,255,.4)">Descargar PDF</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria">
+  <div class="wrap">
+    <p class="eyebrow">Viaje visual</p>
+    <h2 class="sec">La provincia en imágenes</h2>
+    <p class="intro">Toca una foto para verla en grande. Usa las flechas del teclado o desliza para avanzar.</p>
+    <div class="gal" id="gal"></div>
+  </div>
+</section>
+
+<!-- VIAJERO -->
+<section id="viajero">
+  <div class="wrap">
+    <p class="eyebrow">Guía práctica</p>
+    <h2 class="sec">Para el viajero y el peregrino</h2>
+    <div class="trav">
+      <div class="panel">
+        <h3>Cómo llegar</h3>
+        <div class="routes">
+          <div><b>≈ 4 h</b><p><strong>Desde Chiclayo</strong>Chiclayo · puente Cumbil · Santa Cruz.</p></div>
+          <div><b>≈ 4 h</b><p><strong>Desde Cajamarca</strong>Cajamarca · El Empalme · Catilluc · Tongod · Santa Cruz.</p></div>
+          <div><b>≈ 5 h</b><p><strong>Por Chota</strong>Cajamarca · Hualgayoc · Chota · Lajas · Santa Cruz.</p></div>
+        </div>
+        <p class="note" style="margin-top:14px">Tiempos aproximados según Andina. Noviembre es inicio de lluvias en la sierra norte: revisa el estado de la vía antes de salir y llega uno o dos días antes.</p>
+      </div>
+      <div class="panel">
+        <h3>Lista del peregrino</h3>
+        <ul class="check" id="check">
+          <li><label><input type="checkbox" id="c-dni" data-k="dni"><span>DNI o pasaporte</span></label></li>
+          <li><label><input type="checkbox" id="c-poncho" data-k="poncho"><span>Poncho impermeable o casaca para lluvia</span></label></li>
+          <li><label><input type="checkbox" id="c-sol" data-k="sol"><span>Sombrero y bloqueador: a 2 035 m el sol quema aunque esté nublado</span></label></li>
+          <li><label><input type="checkbox" id="c-agua" data-k="agua"><span>Agua y comida para varias horas</span></label></li>
+          <li><label><input type="checkbox" id="c-zap" data-k="zap"><span>Zapatos cerrados y cómodos</span></label></li>
+          <li><label><input type="checkbox" id="c-banco" data-k="banco"><span>Banquito plegable o manta</span></label></li>
+          <li><label><input type="checkbox" id="c-bat" data-k="bat"><span>Celular cargado y batería externa</span></label></li>
+          <li><label><input type="checkbox" id="c-punto" data-k="punto"><span>Punto de reencuentro acordado con tu grupo</span></label></li>
+          <li><label><input type="checkbox" id="c-efect" data-k="efect"><span>Efectivo en billetes pequeños</span></label></li>
+          <li><label><input type="checkbox" id="c-med" data-k="med"><span>Tus medicinas personales</span></label></li>
+        </ul>
+        <div class="meter"><i id="meter"></i></div>
+        <p class="note" id="check-st">0 de 10 listos. Se guarda solo en este dispositivo.</p>
+      </div>
+      <div class="panel">
+        <h3>Fiestas de noviembre y del año</h3>
+        <div class="tbl"><table class="cal">
+          <tr class="hl"><td>14 nov</td><td><b>Visita del Papa León XIV</b> · Santa Cruz</td></tr>
+          <tr class="hl"><td>15–27 nov</td><td>Sexi · Santa Rosa de Lima</td></tr>
+          <tr class="hl"><td>17–21 nov</td><td>Liscan, Pulán · Virgen de los Remedios</td></tr>
+          <tr><td>27 set–2 oct</td><td>Santa Cruz · Señor del Costado (día central 28)</td></tr>
+          <tr><td>29–31 ago</td><td>Catache · San Agustín</td></tr>
+          <tr><td>22–24 set</td><td>Uticyacu · Cruz de Jarromayo</td></tr>
+          <tr><td>13–15 set</td><td>Ninabamba · Señor de los Milagros</td></tr>
+          <tr><td>2–16 jun</td><td>Chancay Baños · San Antonio de Padua</td></tr>
+          <tr><td>3.er jue. ene.</td><td>Yauyucán · Corpus Christi</td></tr>
+        </table></div>
+        <p class="note" style="margin-top:10px">Fechas del Atlas Arqueológico de M. Centurión Burga. Confírmalas con cada parroquia.</p>
+      </div>
+      <div class="panel">
+        <h3>Preguntas frecuentes</h3>
+        <details class="faq"><summary>¿A qué hora es la misa?</summary><p>A las 11:00, según el programa oficial publicado por El Peruano. El Papa llega a las 09:50 y se retira a las 13:15.</p></details>
+        <details class="faq"><summary>¿Dónde me hospedo?</summary><p>La oferta hotelera es pequeña. Las autoridades están capacitando a vecinos para recibir peregrinos en sus casas. Reserva cuanto antes o considera dormir en un distrito cercano.</p></details>
+        <details class="faq"><summary>¿Hará frío o lloverá?</summary><p>Santa Cruz está a 2 035 m. En noviembre empiezan las lluvias en la sierra norte: lleva poncho, abrigo para la mañana y protección para el sol del mediodía.</p></details>
+        <details class="faq"><summary>¿Puedo visitar los sitios arqueológicos por mi cuenta?</summary><p>Varios están en terrenos privados y sin vigilancia. Ve con un guía local, pide permiso a los propietarios y no muevas piedras ni restos.</p></details>
+        <details class="faq"><summary>¿Hay algo que ver después de la misa?</summary><p>Sí: el santuario de Liscan celebra a la Virgen de los Remedios del 17 al 21 de noviembre, y las termas de Chancay Baños son un buen descanso tras la jornada.</p></details>
+      </div>
+    </div>
+
+    <details class="design" style="margin-top:36px">
+      <summary>Cómo se diseñó esta guía</summary>
+      <div class="dgrid">
+        <div>
+          <h4>Teoría del color</h4>
+          <div class="sw">
+            <span><i style="background:#F3F5F6"></i>Cal</span>
+            <span><i style="background:#173A5C"></i>Azul de altura</span>
+            <span><i style="background:#E2B23A"></i>Oro papal</span>
+            <span><i style="background:#A3462D"></i>Teja</span>
+            <span><i style="background:#3D6A4A"></i>Musgo</span>
+          </div>
+          <ul>
+            <li><b>Complementarios:</b> el azul del cielo cruceño y el oro de la Santa Sede son casi opuestos en el círculo cromático. El oro se reserva para lo que importa: la visita, los botones y el tramo del Papa.</li>
+            <li><b>Regla 60-30-10:</b> 60 % blanco de cal (las fachadas), 30 % azul (estructura y títulos), 10 % oro (acción).</li>
+            <li><b>Color con significado:</b> teja para historia, musgo para naturaleza, azul para arqueología y oro para la fe. Se repite igual en la web y en el libro.</li>
+            <li><b>Contraste:</b> textos con contraste AA; versión oscura completa que respeta la preferencia del dispositivo.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Heurísticas y leyes de usabilidad</h4>
+          <ul>
+            <li><b>Visibilidad del estado:</b> barra de lectura, sección activa en el menú, cuenta regresiva, número de página y avance por capítulo en el libro.</li>
+            <li><b>Relación con el mundo real:</b> el libro se hojea como uno de papel; horas en formato peruano y altitudes en m s. n. m.</li>
+            <li><b>Control y libertad:</b> el visor de fotos se cierra con Esc; el libro tiene índice, portada y contraportada a un clic.</li>
+            <li><b>Consistencia:</b> mismos colores, tipografías y botones en web y libro.</li>
+            <li><b>Reconocer antes que recordar:</b> encabezado de capítulo en cada página y etiquetas visibles en los filtros.</li>
+            <li><b>Flexibilidad:</b> teclado, toque, deslizamiento y modo de página simple o doble.</li>
+            <li><b>Ley de Fitts:</b> botones de al menos 44 px; zonas de paso de página en los bordes.</li>
+            <li><b>Ley de Hick y de Miller:</b> cinco capítulos, cinco filtros y paradas de a una.</li>
+            <li><b>Gestalt:</b> proximidad en las tarjetas, continuidad en la línea del programa y figura-fondo en el sello.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="qori"><div class="mk" aria-hidden="true">Q</div><div><b>QORI Soluciones</b><p>Diseño y desarrollo de esta guía. Productos y soluciones digitales: páginas web, invitaciones y experiencias virtuales. <i>Qori</i> significa «oro» en quechua.</p></div></div>
+    <p><b>Fuentes.</b> Historia, atractivos, fiestas y fotografías: Lic. Mario Centurión Burga, <i>Atlas Arqueológico</i> de la provincia de Santa Cruz, <i>Distrito de Santa Cruz</i> (2017) y <i>José del Carmen</i> (2025); derechos reservados del autor. Algunas fotos provienen de archivos comunitarios.</p>
+    <ul>
+      <li><a href="https://elperuano.pe/noticia/305157-papa-leon-xiv-en-peru-revisa-aqui-el-programa-oficial-de-su-visita-del-11-al-16-de-noviembre">El Peruano · Programa oficial de la visita</a></li>
+      <li><a href="https://andina.pe/agencia/noticia-visita-del-papa-leon-xiv-100000-devotos-asistiran-a-misa-se-celebrara-santa-cruz-1092605.aspx">Andina · 100 000 devotos asistirán a la misa en Santa Cruz</a></li>
+      <li><a href="https://larepublica.pe/sociedad/2026/09/22/parroco-de-santa-cruz-ante-la-visita-de-leon-xiv-a-cajamarca-prometio-volver-pero-jamas-imaginamos-que-como-papa-681384">La República · Párroco de Santa Cruz ante la visita</a></li>
+      <li><a href="https://elcomercio.pe/lima/sucesos/santa-cruz-de-succhabamba-el-destino-al-que-leon-xiv-llegara-en-helicoptero-para-volver-a-celebrar-una-misa-pero-esta-vez-como-papa-apuesplan-noticia/">El Comercio · Santa Cruz de Succhabamba, el destino del Papa</a></li>
+      <li><a href="https://www.rcrperu.com/confirman-que-papa-leon-xiv-llegara-el-14-de-noviembre-a-santa-cruz-para-bendecir-a-la-poblacion-de-cajamarca/">RCR · Confirman llegada el 14 de noviembre</a></li>
+    </ul>
+    <p style="margin-top:14px">Horarios y accesos pueden cambiar. Confírmalos en canales oficiales antes de viajar.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" hidden role="status"></div>
+<button class="totop" id="totop" type="button" aria-label="Volver arriba" hidden>↑</button>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Visor de fotos">
+  <div class="hd"><span id="lb-n">1 / 1</span><button type="button" id="lb-x" aria-label="Cerrar visor">✕</button></div>
+  <div class="st"><button type="button" id="lb-p" aria-label="Foto anterior">‹</button><img id="lb-img" alt=""><button type="button" id="lb-nx" aria-label="Foto siguiente">›</button></div>
+  <div class="cp" id="lb-c"></div>
+</div>
+
+<script>
+/* Cuenta regresiva a la misa: 14/11/2026 11:00 hora de Perú (UTC-5) */
+(function(){
+  const T = Date.UTC(2026,10,14,16,0,0);
+  const d=document.getElementById('cd-d'),h=document.getElementById('cd-h'),m=document.getElementById('cd-m'),msg=document.getElementById('cd-msg');
+  function tick(){
+    let s=Math.floor((T-Date.now())/1000);
+    if(s<=0){ d.textContent=h.textContent=m.textContent='0'; msg.textContent = s>-3*3600?'La misa está en curso':'Gracias por acompañar la visita'; return; }
+    d.textContent=Math.floor(s/86400); h.textContent=Math.floor(s%86400/3600); m.textContent=Math.floor(s%3600/60);
+  }
+  tick(); setInterval(tick,30000);
+})();
+
+/* Barra de progreso, sección activa, volver arriba */
+(function(){
+  const bar=document.getElementById('progress'), top=document.getElementById('totop');
+  const links=[...document.querySelectorAll('nav.main a')];
+  const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  function onScroll(){
+    const h=document.documentElement; const p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+    bar.style.width=(p*100)+'%'; top.hidden = h.scrollTop<800;
+    let act=-1; secs.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top<140) act=i; });
+    links.forEach((a,i)=>a.setAttribute('aria-current', i===act?'true':'false'));
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  top.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+})();
+
+/* Filtros */
+(function(){
+  const btns=[...document.querySelectorAll('.filters button')], cards=[...document.querySelectorAll('#cards .card')], out=document.getElementById('count-f');
+  function apply(f){
+    let n=0; cards.forEach(c=>{const ok=f==='all'||c.dataset.c.split(' ').includes(f); c.hidden=!ok; if(ok)n++;});
+    btns.forEach(b=>b.setAttribute('aria-pressed', b.dataset.f===f?'true':'false'));
+    out.textContent = n+(n===1?' lugar':' lugares');
+  }
+  btns.forEach(b=>b.onclick=()=>apply(b.dataset.f)); apply('all');
+})();
+
+/* Galería */
+const GAL=[
+ ['valle','El valle de Santa Cruz de Succhabamba'],['plaza-techos','La plaza desde los techos de teja'],['calle-balcones','Calle con balcones y portones azules'],
+ ['chorro-blanco','Catarata Chorro Blanco, Pulán'],['senor-costado','El Señor del Costado, patrón de la ciudad'],['cerro-tren-farallon','Farallones del Cerro Tren'],
+ ['tragadero','El Tragadero o Boca del Diablo, Ninabamba'],['sombreros','Sombreros de paja en la feria'],['virgen-remedios','Virgen de los Remedios de Liscan'],
+ ['catache','Catache entre montañas'],['laguna-santa-lucia','Laguna Santa Lucía'],['ventanillas-2','Nichos de Las Ventanillas'],
+ ['mariposa','Mariposa en el bosque de Platanar'],['sexi-catedral','La Catedral, formación rocosa de Sexi'],['calle-grau','Calle Miguel Grau, foto antigua'],
+ ['cristo-uticyacu','Cristo Redentor de Uticyacu'],['canon-chancay','Cañón del río Chancay'],['tejidos','Tejidos de colores'],
+ ['poro-poro','Altar de piedra en Poro Poro'],['sexi-plaza','Plaza de Sexi'],['reloj-piedra','Reloj de piedra del Cerro Tren'],['pavo-real','Pavo real en Llacta Sapuy']
+];
+(function(){
+  const g=document.getElementById('gal');
+  g.innerHTML=GAL.map(([f,c])=>`<button type="button"><img src="img/${f}.jpg" alt="${c}" data-lb="${c}"><span>${c}</span></button>`).join('');
+})();
+
+/* Visor de fotos: todas las imágenes con data-lb */
+(function(){
+  const lb=document.getElementById('lb'), im=document.getElementById('lb-img'), cp=document.getElementById('lb-c'), n=document.getElementById('lb-n');
+  let list=[], i=0, last=null;
+  function show(){ const e=list[i]; im.src=e.src; im.alt=e.alt; cp.textContent=e.dataset.lb; n.textContent=`${i+1} / ${list.length}`; }
+  function open(e){ list=[...document.querySelectorAll('img[data-lb]')].filter(x=>!x.closest('[hidden]')); i=list.indexOf(e); last=document.activeElement; lb.hidden=false; show(); document.getElementById('lb-x').focus(); document.body.style.overflow='hidden'; }
+  function close(){ lb.hidden=true; document.body.style.overflow=''; last&&last.focus&&last.focus(); }
+  const step=d=>{ i=(i+d+list.length)%list.length; show(); };
+  document.addEventListener('click',e=>{ const t=e.target.closest('img[data-lb]'); if(t && !lb.contains(t)) open(t); });
+  document.getElementById('lb-x').onclick=close; document.getElementById('lb-p').onclick=()=>step(-1); document.getElementById('lb-nx').onclick=()=>step(1);
+  lb.addEventListener('click',e=>{ if(e.target===lb||e.target.classList.contains('st')) close(); });
+  document.addEventListener('keydown',e=>{ if(lb.hidden) return; if(e.key==='Escape') close(); if(e.key==='ArrowRight') step(1); if(e.key==='ArrowLeft') step(-1); });
+  let x0=null; lb.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+  lb.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>45) step(dx<0?1:-1); x0=null; },{passive:true});
+})();
+
+/* Lista del peregrino */
+(function(){
+  const cbs=[...document.querySelectorAll('#check input')], st=document.getElementById('check-st'), mt=document.getElementById('meter');
+  function upd(){ const k=cbs.filter(c=>c.checked).length; st.textContent=`${k} de ${cbs.length} listos. Se guarda solo en este dispositivo.`; mt.style.width=(k/cbs.length*100)+'%'; }
+  cbs.forEach(c=>{ try{c.checked=localStorage.getItem('chk-'+c.dataset.k)==='1'}catch(e){}
+    c.onchange=()=>{ try{localStorage.setItem('chk-'+c.dataset.k,c.checked?'1':'0')}catch(e){} upd(); }; });
+  upd();
+})();
+
+/* Descarga del PDF del libro */
+(async()=>{
+  const btns=[...document.querySelectorAll('.pdf-btn')], toast=document.getElementById('toast');
+  const say=t=>{toast.textContent=t;toast.hidden=false;clearTimeout(say.t);say.t=setTimeout(()=>toast.hidden=true,3500);};
+  let dl=null; try{ dl = window.claude?.use ? await window.claude.use('downloads') : null; }catch(e){}
+  if(!dl) return;
+  btns.forEach(b=>{ b.hidden=false; b.onclick=async()=>{
+    btns.forEach(x=>x.disabled=true); const t=b.textContent; b.textContent='Preparando…';
+    try{
+      const r=await fetch('Guia-Ruta-del-Papa-Leon-XIV-Santa-Cruz.pdf'); if(!r.ok) throw {code:'fetch'};
+      await dl.save({filename:'Guia-Ruta-del-Papa-Leon-XIV-Santa-Cruz.pdf', data:await r.blob()});
+      say('Listo: el PDF se guardó en tu dispositivo.');
+    }catch(e){
+      const c=e&&e.code;
+      say(c==='declined'?'Descarga cancelada.': c==='rate_limited'?'Ya hay una descarga en curso; espera un momento.':'No se pudo descargar el PDF en esta vista.');
+      if(c==='unavailable'||c==='not_granted') btns.forEach(x=>x.hidden=true);
+    }finally{ btns.forEach(x=>x.disabled=false); b.textContent=t; }
+  }; });
+})();
+</script>
+
+</body></html>

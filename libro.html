@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Libro de la Ruta del Papa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Barlow+Condensed:wght@500;600&display=swap">
+<style>
+/* Layout: un libro abierto sobre una mesa de piedra; lomo al centro, folios abajo, barra de capítulos debajo. */
+:root{
+  --cal:#F3F5F6;        /* fachada encalada, sesgo frío hacia el azul (60%) */
+  --papel:#FBFAF6;      /* hoja del libro */
+  --tinta:#18263A;      /* texto */
+  --jalca:#173A5C;      /* azul cielo de altura (30%) */
+  --oro:#B8860B;        /* oro papal (10%) */
+  --oro-vivo:#E2B23A;   /* oro sobre fondos oscuros */
+  --teja:#A3462D;       /* teja de arcilla: historia */
+  --musgo:#3F6B4B;      /* naturaleza */
+  --gris:#5E6B7A;       /* texto secundario */
+  --linea:#D9DEE4;
+  --mesa:#DCE3E9;       /* superficie detrás del libro */
+  --sombra:rgba(16,32,52,.22);
+  --f-display:"Cinzel","Trajan Pro",Georgia,serif;
+  --f-body:"Literata",Georgia,"Times New Roman",serif;
+  --f-util:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --cal:#0D1824;--papel:#F4F1E8;--tinta:#18263A;--jalca:#173A5C;--oro:#9A6F08;--oro-vivo:#E8B640;--teja:#A3462D;--musgo:#3F6B4B;--gris:#5E6B7A;--linea:#D6D9DC;--mesa:#0A131D;--sombra:rgba(0,0,0,.55);color-scheme:dark}}
+:root[data-theme="dark"]{--cal:#0D1824;--papel:#F4F1E8;--tinta:#18263A;--jalca:#173A5C;--oro:#9A6F08;--oro-vivo:#E8B640;--teja:#A3462D;--musgo:#3F6B4B;--gris:#5E6B7A;--linea:#D6D9DC;--mesa:#0A131D;--sombra:rgba(0,0,0,.55);color-scheme:dark}
+/* El papel del libro se mantiene claro en ambos temas (es un objeto físico); la mesa y los controles cambian. */
+:root{--ui-fg:#18263A;--ui-sub:#4D5B6B;--ui-bg:#FFFFFF;--ui-line:#C9D2DB}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ui-fg:#E8EEF4;--ui-sub:#A9B6C4;--ui-bg:#15263A;--ui-line:#2A3F57}}
+:root[data-theme="dark"]{--ui-fg:#E8EEF4;--ui-sub:#A9B6C4;--ui-bg:#15263A;--ui-line:#2A3F57}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--mesa);color:var(--ui-fg);font-family:var(--f-body);
+  padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px);overflow:hidden;display:flex;flex-direction:column}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--oro-vivo);outline-offset:2px}
+
+/* Barra superior */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;flex-wrap:wrap}
+.top .brand{font-family:var(--f-display);font-weight:700;letter-spacing:.08em;font-size:15px;text-decoration:none;display:flex;gap:10px;align-items:center}
+.top .brand small{font-family:var(--f-util);font-weight:500;letter-spacing:.12em;color:var(--ui-sub);font-size:13px;text-transform:uppercase}
+.top .acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font-family:var(--f-util);font-size:15px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ui-line);background:var(--ui-bg);color:var(--ui-fg);
+  padding:8px 14px;border-radius:6px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:40px}
+.btn:hover{border-color:var(--oro-vivo)}
+.btn.gold{background:var(--oro-vivo);border-color:var(--oro-vivo);color:#1B1505;font-weight:600}
+.toast{position:fixed;left:50%;top:64px;transform:translateX(-50%);z-index:1000;background:var(--ui-bg);color:var(--ui-fg);border:1px solid var(--ui-line);border-radius:8px;padding:8px 14px;font-family:var(--f-util);font-size:15px;box-shadow:0 8px 24px var(--sombra)}
+.btn[aria-pressed="true"]{background:var(--jalca);color:#fff;border-color:var(--jalca)}
+
+/* Escenario */
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative}
+.book{position:relative;width:calc(var(--pw)*2);height:var(--ph);perspective:2600px;transition:transform .7s cubic-bezier(.3,.7,.2,1);filter:drop-shadow(0 12px 22px var(--sombra))}
+.book.single{width:var(--pw)}
+.book.closed-front{transform:translateX(calc(var(--pw)*-0.5))}
+.book.closed-back{transform:translateX(calc(var(--pw)*0.5))}
+.leaf{position:absolute;top:0;left:50%;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;
+  transition:transform .85s cubic-bezier(.45,.05,.25,1)}
+.leaf.flipped{transform:rotateY(-180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;background:var(--papel);color:var(--tinta)}
+.face.back{transform:rotateY(180deg)}
+.face.front{box-shadow:inset 18px 0 22px -18px rgba(0,0,0,.28);border-radius:0 4px 4px 0}
+.face.back{box-shadow:inset -18px 0 22px -18px rgba(0,0,0,.28);border-radius:4px 0 0 4px}
+.single .sp{position:absolute;inset:0;background:var(--papel);color:var(--tinta);border-radius:4px;overflow:hidden;animation:enter .45s ease}
+.single .sp.from-left{animation-name:enterL}
+@keyframes enter{from{transform:translateX(22px);opacity:.2}to{transform:none;opacity:1}}
+@keyframes enterL{from{transform:translateX(-22px);opacity:.2}to{transform:none;opacity:1}}
+.leaf.moving .face.front{box-shadow:inset 18px 0 22px -18px rgba(0,0,0,.28),-6px 0 24px rgba(0,0,0,.18)}
+
+/* Zonas de clic para pasar página */
+.hit{position:absolute;top:0;bottom:0;width:calc(var(--pw)*.1);z-index:500;cursor:pointer;background:none;border:0;padding:0}
+.hit.l{left:0}.hit.r{right:0}
+.hit:hover::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(226,178,58,.0),rgba(226,178,58,.14))}
+.hit.l:hover::after{background:linear-gradient(270deg,rgba(226,178,58,.0),rgba(226,178,58,.14))}
+
+/* Página: todo en em, escala con el ancho de la página */
+.pg{position:absolute;inset:0;padding:2.2em 2.3em 2.6em;font-size:calc(var(--pw)/var(--fd,29));line-height:1.45;display:flex;flex-direction:column;gap:.7em}
+.pg .rh{position:absolute;top:.9em;left:2.3em;right:2.3em;display:flex;justify-content:space-between;font-family:var(--f-util);font-size:.72em;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
+.pg .folio{position:absolute;bottom:.9em;left:0;right:0;text-align:center;font-family:var(--f-display);font-size:.75em;color:var(--gris);letter-spacing:.1em}
+.pg h2{font-family:var(--f-display);font-weight:700;color:var(--jalca);font-size:1.55em;line-height:1.12;margin:.2em 0 0;text-wrap:balance;letter-spacing:.02em}
+.pg h3{font-family:var(--f-util);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:.82em;color:var(--oro);margin:0}
+.pg p{margin:0}
+.pg .lead{font-size:1.05em}
+.pg small,.pg .note{font-size:.78em;color:var(--gris)}
+.pg figure{margin:0;position:relative;border-radius:2px;overflow:hidden;background:#cfd6dc}
+.pg figure img{display:block;width:100%;height:100%;object-fit:cover}
+.pg figcaption{font-family:var(--f-util);font-size:.72em;letter-spacing:.06em;color:var(--gris);margin-top:.25em}
+.pg .cap{display:flex;flex-direction:column;gap:.2em}
+.pg ul,.pg ol{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:.3em}
+.pg .two{display:grid;grid-template-columns:1fr 1fr;gap:.6em}
+.pg .kv{display:grid;grid-template-columns:auto 1fr;gap:.25em .8em;font-size:.9em}
+.pg .kv b{font-family:var(--f-util);font-weight:600;letter-spacing:.06em;color:var(--jalca);font-variant-numeric:tabular-nums}
+.pg blockquote{margin:0;padding:.6em .9em;border-left:3px solid var(--oro);font-style:italic;background:rgba(184,134,11,.07)}
+.pg .chip{align-self:flex-start;display:inline-block;font-family:var(--f-util);font-size:.7em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .55em;border-radius:99px;border:1px solid currentColor}
+.c-fe{color:var(--oro)}.c-hist{color:var(--teja)}.c-nat{color:var(--musgo)}.c-arq{color:var(--jalca)}
+
+/* Portada y aperturas de capítulo */
+.cover{padding:0;color:#fff;background:var(--jalca)}
+.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:saturate(.8)}
+.cover .in{position:absolute;inset:0;padding:2.4em 2.2em;display:flex;flex-direction:column;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(15,35,58,.85) 0%,rgba(15,35,58,.25) 45%,rgba(15,35,58,.9) 100%)}
+.cover .t{font-family:var(--f-display);font-weight:700;font-size:2.2em;line-height:1.02;letter-spacing:.03em;text-wrap:balance}
+.cover .t span{color:var(--oro-vivo)}
+.cover .k{font-family:var(--f-util);letter-spacing:.2em;text-transform:uppercase;font-size:.85em;color:#E9EEF3}
+.cover .seal{width:4.4em;height:4.4em;border:2px solid var(--oro-vivo);border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);color:var(--oro-vivo);font-size:.95em;text-align:center;line-height:1}
+.opener{padding:0}
+.opener figure{position:absolute;inset:0;border-radius:0}
+.opener .band{position:absolute;left:0;right:0;bottom:0;padding:1.4em 2.2em 2.6em;background:var(--jalca);color:#fff;display:flex;flex-direction:column;gap:.35em}
+.opener .num{font-family:var(--f-display);color:var(--oro-vivo);font-size:1em;letter-spacing:.2em}
+.opener .band h2{color:#fff;font-size:1.9em;margin:0}
+.opener .band p{color:#DCE5EE;font-size:.92em}
+.opener .folio{color:#AFC0D1}
+
+/* Programa */
+.prog{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--linea);margin-left:.3em}
+.prog .it{position:relative;padding:.25em 0 .45em 1em;display:grid;grid-template-columns:3.2em 1fr;gap:.1em .5em;font-size:.88em}
+.prog .it::before{content:"";position:absolute;left:-.42em;top:.55em;width:.7em;height:.7em;border-radius:50%;background:var(--papel);border:2px solid var(--gris)}
+.prog .it.sc::before{background:var(--oro);border-color:var(--oro)}
+.prog .it.sc{background:rgba(184,134,11,.09)}
+.prog time{font-family:var(--f-util);font-weight:600;font-size:1.1em;color:var(--jalca);font-variant-numeric:tabular-nums}
+.prog small{grid-column:2;font-size:.85em}
+
+/* Índice */
+.toc{list-style:none;padding:0!important;gap:.15em!important}
+.toc button{all:unset;cursor:pointer;display:grid;grid-template-columns:2em 1fr auto;gap:.5em;width:100%;padding:.35em .2em;border-bottom:1px dotted var(--linea);align-items:baseline}
+.toc button:hover,.toc button:focus-visible{background:rgba(184,134,11,.1)}
+.toc .n{font-family:var(--f-display);color:var(--oro)}
+.toc .p{font-family:var(--f-util);color:var(--gris);font-variant-numeric:tabular-nums}
+.toc .s{font-size:.82em;color:var(--gris);grid-column:2/4}
+
+/* Paseo numerado */
+.walk{counter-reset:w;list-style:none;padding:0!important}
+.walk li{counter-increment:w;display:grid;grid-template-columns:1.7em 1fr;gap:.5em;font-size:.9em}
+.walk li::before{content:counter(w);font-family:var(--f-display);font-weight:700;color:#fff;background:var(--jalca);border-radius:50%;width:1.6em;height:1.6em;display:grid;place-items:center;font-size:.9em}
+
+table.cal{border-collapse:collapse;width:100%;font-size:.82em}
+table.cal td{padding:.28em .2em;border-bottom:1px solid var(--linea);vertical-align:top}
+table.cal td:first-child{font-family:var(--f-util);font-weight:600;color:var(--jalca);white-space:nowrap;font-variant-numeric:tabular-nums}
+table.cal tr.hl td{background:rgba(184,134,11,.12)}
+
+.check{list-style:none;padding:0!important}
+.check label{display:flex;gap:.5em;align-items:flex-start;cursor:pointer;font-size:.9em}
+.check input{width:1.05em;height:1.05em;margin-top:.2em;accent-color:var(--jalca);flex:none}
+.check input:checked+span{text-decoration:line-through;color:var(--gris)}
+
+.gl{display:grid;grid-template-columns:auto 1fr;gap:.3em .8em;font-size:.88em}
+.gl dt{font-family:var(--f-display);font-weight:700;color:var(--teja)}
+.gl dd{margin:0}
+
+/* Controles inferiores */
+.dock{padding-block:8px 12px;display:flex;flex-direction:column;gap:8px;align-items:center}
+.nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.navbtn{width:48px;height:48px;border-radius:50%;border:1px solid var(--ui-line);background:var(--ui-bg);color:var(--ui-fg);font-size:22px;cursor:pointer;display:grid;place-items:center}
+.navbtn:disabled{opacity:.35;cursor:not-allowed}
+.navbtn:not(:disabled):hover{border-color:var(--oro-vivo);color:var(--oro-vivo)}
+.status{font-family:var(--f-util);letter-spacing:.08em;font-size:15px;min-width:13em;text-align:center;color:var(--ui-fg);font-variant-numeric:tabular-nums}
+.status b{color:var(--oro-vivo);font-weight:600}
+.rail{display:flex;gap:4px;width:min(720px,100%)}
+.rail button{flex:var(--w,1);height:30px;border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;gap:3px;align-items:stretch;min-width:0}
+.rail button i{display:block;height:6px;border-radius:3px;background:var(--ui-line);position:relative;overflow:hidden}
+.rail button i::after{content:"";position:absolute;inset:0;width:var(--fill,0%);background:var(--oro-vivo);transition:width .5s}
+.rail button span{font-family:var(--f-util);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ui-sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.rail button[aria-current="true"] span{color:var(--ui-fg)}
+
+.hint{position:absolute;z-index:900;bottom:12px;left:50%;transform:translateX(-50%);background:var(--ui-bg);color:var(--ui-fg);border:1px solid var(--ui-line);border-radius:8px;padding:10px 14px;
+  font-family:var(--f-util);font-size:15px;letter-spacing:.03em;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px var(--sombra);max-width:calc(100% - 24px)}
+.hint kbd{font-family:var(--f-util);border:1px solid var(--ui-line);border-radius:4px;padding:0 6px}
+@media (max-width:560px){.rail button span{display:none}.status{min-width:0}.top .brand small{display:none}.top{flex-wrap:nowrap}.btn{font-size:13px;padding:6px 10px;min-height:36px}#b-mode{display:none}.hint{flex-direction:column;align-items:stretch;text-align:center}.navbtn{width:44px;height:44px}}
+@media (prefers-reduced-motion:reduce){.leaf,.book{transition:none}.single .sp{animation:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="index.html" title="Volver a la página web">✝ Succhabamba <small>por QORI Soluciones</small></a>
+  <div class="acts">
+    <button class="btn" id="b-toc" type="button">Índice</button>
+    <button class="btn" id="b-mode" type="button" aria-pressed="false" title="Cambiar entre página doble y página simple">Página simple</button>
+    <button class="btn gold" id="b-pdf" type="button" hidden>Descargar PDF</button>
+    <a class="btn" href="index.html">Ver la web</a>
+  </div>
+</header>
+
+<main class="stage" id="stage" aria-live="polite">
+  <div class="book" id="book"></div>
+  <div class="toast" id="toast" hidden role="status"></div>
+  <div class="hint" id="hint" hidden>
+    <span>Pasa las páginas con <kbd>←</kbd> <kbd>→</kbd>, tocando los bordes o deslizando.</span>
+    <button class="btn" id="hint-ok" type="button">Entendido</button>
+  </div>
+</main>
+
+<footer class="dock">
+  <nav class="nav" aria-label="Navegación del libro">
+    <button class="navbtn" id="b-first" type="button" aria-label="Ir a la portada">«</button>
+    <button class="navbtn" id="b-prev" type="button" aria-label="Página anterior">‹</button>
+    <div class="status" id="status">Portada</div>
+    <button class="navbtn" id="b-next" type="button" aria-label="Página siguiente">›</button>
+    <button class="navbtn" id="b-last" type="button" aria-label="Ir a la contraportada">»</button>
+  </nav>
+  <div class="rail" id="rail" aria-label="Capítulos"></div>
+</footer>
+
+<script>
+const IMG = n => `img/${n}.jpg`;
+const fig = (n, alt, cap, h) => `<div class="cap"><figure style="height:${h||'9em'}"><img src="${IMG(n)}" alt="${alt}" loading="lazy"></figure>${cap?`<figcaption>${cap}</figcaption>`:''}</div>`;
+
+/* ch = índice de capítulo (0 = preliminares). Cada página es una hoja del libro. */
+const CH = ['Inicio','I · La visita','II · La ciudad','III · Alrededores','IV · La provincia','V · El viajero'];
+const P = [];
+const add = (ch, html, cls='') => P.push({ch, html, cls});
+
+/* 0 · Portada */
+add(0, `<img src="${IMG('valle')}" alt="Vista del valle de Santa Cruz de Succhabamba">
+<div class="in">
+  <div class="k">Santa Cruz de Succhabamba · Cajamarca · Perú</div>
+  <div>
+    <div class="t">La Ruta del <span>Papa León XIV</span></div>
+    <p style="margin-top:.6em;font-size:1em;color:#E9EEF3">Guía para el peregrino y el viajero</p>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:1em">
+    <div class="k">Sábado 14 de noviembre de 2026<br><span style="color:#E8B640">QORI Soluciones</span></div>
+    <div class="seal">XIV<br><small style="font-size:.55em;letter-spacing:.1em">MMXXVI</small></div>
+  </div>
+</div>`, 'cover');
+
+/* 1 · Bienvenida */
+add(0, `<h3>Bienvenida</h3>
+<h2>Vuelve a casa quien prometió volver</h2>
+<p class="lead">Como obispo de Chiclayo, Robert Francis Prevost subió muchas veces a esta provincia: celebró fiestas patronales, bautizos y confirmaciones en sus distritos. Al despedirse dijo que regresaría.</p>
+<p>El sábado 14 de noviembre de 2026 regresa como León XIV. Esta guía te acompaña en ese día y en los días de alrededor: quiénes somos, qué ver, cómo llegar y cómo vivir la visita con calma.</p>
+<blockquote>«Prometió volver a Santa Cruz, pero jamás imaginamos que regresaría a su casa como Papa.»<br><small>P. Wildor Cubas Julca, párroco de Santa Cruz, ordenado sacerdote por Prevost</small></blockquote>
+<p class="note">Santa Cruz pertenece al departamento de Cajamarca, pero en lo eclesiástico es parte de la diócesis de Chiclayo. Por eso fue tierra de su obispo.</p>`);
+
+/* 2 · Índice (se rellena después) */
+add(0, `<h3>Contenido</h3><h2>Índice</h2><ul class="toc" id="toc-list"></ul>
+<p class="note" style="margin-top:auto">Toca un capítulo para ir directamente a él. La barra inferior muestra en qué parte del libro estás.</p>`);
+
+/* 3 · Cómo usar */
+add(0, `<h3>Antes de empezar</h3><h2>Cómo leer este libro</h2>
+<div class="kv">
+<b>→ / ←</b><span>Teclado: página siguiente o anterior.</span>
+<b>Inicio · Fin</b><span>Ir a la portada o a la contraportada.</span>
+<b>Bordes</b><span>Toca el borde derecho o izquierdo de la página.</span>
+<b>Deslizar</b><span>En el celular, desliza con el dedo.</span>
+<b>Índice</b><span>Botón superior: salta a cualquier capítulo.</span>
+</div>
+<h3 style="margin-top:.6em">Colores que te guían</h3>
+<div style="display:flex;flex-wrap:wrap;gap:.4em"><span class="chip c-fe">Fe y visita</span><span class="chip c-hist">Historia</span><span class="chip c-nat">Naturaleza</span><span class="chip c-arq">Arqueología</span></div>
+<p class="note">Los mismos colores se repiten en todo el libro y en la página web, para que reconozcas el tipo de lugar sin leer.</p>
+<div class="kv" style="margin-top:auto"><b>Altitud</b><span>2 035 m s. n. m. (capital provincial)</span><b>Superficie</b><span>1 417,93 km² · 11 distritos</span><b>Provincia desde</b><span>21 de abril de 1950</span></div>`);
+
+/* ===== I · La visita ===== */
+add(1, `${fig('plaza','Plaza de Armas de Santa Cruz con palmeras','', '100%')}
+<div class="band"><div class="num">CAPÍTULO I</div><h2>La visita</h2><p>Cuatro horas que la provincia esperó toda una vida.</p></div>`, 'opener');
+
+add(1, `<h3 class="c-fe">Sábado 14 de noviembre · programa oficial</h3>
+<h2>El día del Papa</h2>
+<div class="prog">
+ <div class="it"><time>08:00</time><span>Coronación de la Virgen Inmaculada</span><small>Catedral Santa María, Chiclayo</small></div>
+ <div class="it sc"><time>09:10</time><span>Sale en helicóptero</span><small>Base Aérea de Chiclayo</small></div>
+ <div class="it sc"><time>09:50</time><span><b>Llega a Santa Cruz</b></span><small>Helipuerto de Santa Cruz de Succhabamba</small></div>
+ <div class="it sc"><time>11:00</time><span><b>Santa Misa</b></span><small>Explanada de Santa Cruz de Succhabamba</small></div>
+ <div class="it sc"><time>13:15</time><span>Retorno en helicóptero</span><small>Helipuerto de Santa Cruz</small></div>
+ <div class="it"><time>14:00</time><span>Llega a Chiclayo</span><small>Base Aérea Pedro Ruiz Gallo</small></div>
+ <div class="it"><time>17:30</time><span>Clausura del Año Jubilar</span><small>Santuario de Santo Toribio de Mogrovejo</small></div>
+</div>
+<p class="note">En dorado, el tramo en Santa Cruz. Fuente: programa oficial publicado por El Peruano. Revisa cambios de última hora en canales oficiales.</p>`);
+
+add(1, `<h3 class="c-fe">Dónde será la misa</h3>
+<h2>Del aeródromo de 1942 a la explanada del Papa</h2>
+<p>Las autoridades preparan para la misa el antiguo campo de aviación de la ciudad, un terreno de unas 23 hectáreas. Su historia empieza en 1938, cuando el aviador Juan Pardo y Miguel aterrizó en esta planicie con su avioneta <i>El Pajarito</i> y la propuso como aeródromo de emergencia.</p>
+<p>El aeródromo «Leoncio Prado» se inauguró el 27 de setiembre de 1942. Hoy figura como Centro Comunal Multiusos. Ochenta y cuatro años después, otra vez llega alguien por el aire.</p>
+<div class="kv"><b>Peregrinos</b><span>Entre 100 000 y 200 000 según estimaciones oficiales</span><b>Población</b><span>Unos 35 000 habitantes en la provincia</span><b>Misa</b><span>11:00 h, hora de Perú</span></div>
+<p class="note">Fuentes: Andina, RCR, La República; libro <i>José del Carmen</i> (M. Centurión Burga).</p>`);
+
+add(1, `<h3 class="c-fe">El obispo que subía a la sierra</h3>
+<h2>Prevost y Santa Cruz</h2>
+<p>Robert Francis Prevost, agustino, fue administrador apostólico y luego obispo de Chiclayo entre 2014 y 2023. En esos años recorrió los distritos cruceños y presidió las fiestas del Señor del Costado y de la Virgen de los Remedios.</p>
+${fig('liscan','Santuario de la Virgen de los Remedios en Liscan, Pulán','Santuario de la Virgen de los Remedios · Liscan, Pulán','8.5em')}
+<p>El 11 de noviembre de 2016, por el Decreto N.º 063, elevó la capilla de Liscan a <b>Santuario Diocesano</b>. Su fiesta se celebra del 17 al 21 de noviembre: tres días después de la visita.</p>
+<p class="note">En Catache, tierra del patrón San Agustín, también celebró como obispo: el mismo santo de su orden.</p>`);
+
+/* ===== II · La ciudad ===== */
+add(2, `${fig('plaza-aerea','Vista aérea de la plaza principal y techos de teja','', '100%')}
+<div class="band"><div class="num">CAPÍTULO II</div><h2>La ciudad</h2><p>Una cruz de carrizo en la pampa: eso significa Succhabamba.</p></div>`, 'opener');
+
+add(2, `<h3 class="c-hist">Leyenda fundacional · 3 de mayo de 1549</h3>
+<h2>La Cruz de Succha</h2>
+<p>Un labriego buscaba un buey entre los carrizales de una laguna cuando encontró una cruz hecha de <i>succha</i>, carrizo. La llamaron «Cruz Verde». La llevaron en procesión hasta el cerro Cruz Pampa y le levantaron un templo de piedra, barro y paja.</p>
+<p>Cuenta la tradición que la cruz desaparecía y volvía siempre a la laguna. Entendieron que quería su pueblo allí mismo. Así nació, hacia 1556, la aldea de Santa Cruz de Succhabamba.</p>
+<div class="two">
+<div><h3>Santa Cruz</h3><p class="note">Nombre español: la cruz hallada.</p></div>
+<div><h3>Succha · bamba</h3><p class="note">Quechua: carrizo en la pampa.</p></div>
+</div>
+<p class="note" style="margin-top:auto">En el escudo provincial se lee <i>ECCE SANCTA CRUCIS VERA EFIGIES</i>: «He aquí la verdadera imagen de la Santa Cruz».</p>`);
+
+add(2, `<h3 class="c-fe">Patrón de la ciudad · desde 1674</h3>
+<h2>El Señor del Costado</h2>
+<div class="two" style="grid-template-columns:1fr 1.25fr;align-items:start">
+${fig('senor-costado','Imagen del Señor del Costado en su altar','Imagen de cedro, estilo barroco','15em')}
+<div style="display:flex;flex-direction:column;gap:.6em">
+<p>El 28 de setiembre de 1674 llegó a la plaza una mula cansada con un cajón y sin arriero. Nadie lo reclamó. Al abrirlo un año después, encontraron un Cristo resucitado de tamaño natural, con la llaga del costado.</p>
+<p>La mula desapareció. El pueblo lo llevó al templo y lo declaró su patrón.</p>
+</div></div>
+<div class="kv"><b>Altura</b><span>1,70 m, cedro tallado</span><b>Fiesta</b><span>27 de setiembre al 2 de octubre · día central 28</span></div>
+<p class="note">Fue uno de los patronos que Prevost honró como obispo.</p>`);
+
+add(2, `<h3 class="c-hist">Línea de tiempo</h3>
+<h2>De aldea a provincia</h2>
+<div class="kv" style="font-size:.86em;gap:.45em .9em">
+<b>1535</b><span>Aldea de Santa Lucía, reducción de indígenas.</span>
+<b>1549</b><span>Hallazgo de la Cruz de Succha (3 de mayo).</span>
+<b>1556</b><span>Fundación de la aldea de Santa Cruz de Succhabamba.</span>
+<b>1590</b><span>Se inaugura el templo de La Wayrona.</span>
+<b>1596</b><span>Santo Toribio de Mogrovejo confirma aquí a 332 personas.</span>
+<b>1674</b><span>Llega la imagen del Señor del Costado.</span>
+<b>1823</b><span>Simón Bolívar visita la villa (12 de diciembre).</span>
+<b>1870</b><span>Santa Cruz es distrito de la nueva provincia de Hualgayoc.</span>
+<b>1882</b><span>Batalla de Montán y Grito de Montán, en sus linderos.</span>
+<b>1942</b><span>Se inaugura el aeródromo «Leoncio Prado».</span>
+<b>1950</b><span>Ley 11328: nace la provincia de Santa Cruz (21 de abril).</span>
+<b>2026</b><span>El Papa León XIV celebra misa en la ciudad.</span>
+</div>
+<p class="note" style="margin-top:auto">Santo Toribio y León XIV: dos pastores de la diócesis norteña que pasaron por la misma plaza, con 430 años de distancia.</p>`);
+
+add(2, `<h3 class="c-hist">Santa Cruz del ayer</h3>
+<h2>La plaza que vio pasar el siglo</h2>
+${fig('plaza-1951','Plaza de Santa Cruz en 1951, fotografía coloreada','Plaza de Santa Cruz, 1951','8em')}
+${fig('iglesia-1962','Plaza de Armas e iglesia La Inmaculada en 1962','Plaza de Armas e iglesia La Inmaculada, 1962','8em')}
+<p class="note">La iglesia colonial de inicios del siglo XX tenía un reloj con números romanos en su torre. Al demolerse el templo hacia 1964, el reloj pasó a la torre de la Municipalidad, donde sigue.</p>`);
+
+add(2, `<h3 class="c-hist">Arquitectura</h3>
+<h2>Adobe, teja y piedra de Cotorumi</h2>
+${fig('calle-balcones','Calle con casonas blancas, balcones corridos y puertas azules','Balcones corridos y portones de madera','9em')}
+<p>Santa Cruz es de las pocas ciudades andinas que conservan su traza colonial. Mira estos detalles al caminar:</p>
+<ul>
+<li>Casonas de adobe de dos pisos, con el primero de 3 a 4 metros de alto y muros de hasta 1,50 m de ancho.</li>
+<li>Balcones corridos de madera en su color natural.</li>
+<li>Techos de teja roja con aleros pronunciados.</li>
+<li>Fachadas de blanco tierra de la cantera de San Isidro; zócalos y veredas de piedra blanca del cerro Cotorumi.</li>
+</ul>`);
+
+add(2, `<h3 class="c-fe">Paseo a pie · unas 2 horas</h3>
+<h2>Recorrido del peregrino por el centro</h2>
+<ol class="walk">
+<li><span><b>Plaza de Armas.</b> Glorieta, palmeras y el corazón de la fiesta.</span></li>
+<li><span><b>Iglesia La Inmaculada.</b> Casa del Señor del Costado. En el atrio, la <i>Virgen Roja</i>: 2,40 m tallados por Ana Mescaño en una piedra roja del Cotorumi.</span></li>
+<li><span><b>Municipalidad.</b> Antiguo Cabildo de 1801. Busca el reloj de la torre: marca el cuatro como IIII, no IV.</span></li>
+<li><span><b>Puente Colón.</b> A dos cuadras de la plaza, al inicio del Jr. Cutervo. Arco de piedra blanca unido con calicanto.</span></li>
+<li><span><b>Mirador Cotorumi.</b> La réplica de la Cruz de Succha domina toda la ciudad.</span></li>
+<li><span><b>Explanada.</b> El antiguo aeródromo, escenario de la misa.</span></li>
+</ol>
+${fig('glorieta','Glorieta de la plaza de Santa Cruz','', '6.5em')}`);
+
+add(2, `<h3 class="c-hist">Dos curiosidades</h3>
+<h2>Un puente de cal y huevo</h2>
+${fig('puente-colon','Puente Colón, arco de piedra sobre la quebrada El Pueblo','Puente Colón sobre la quebrada El Pueblo','8.5em')}
+<p>El maestro picapedrero Eusebio Bustamante levantó el Puente Colón en piedra blanca del Cotorumi. Las piedras se unieron con <b>calicanto</b>: cal mezclada con miles de huevos y miel, una técnica traída de Europa en la Colonia. Las fuentes locales fechan la obra entre 1935 y 1948.</p>
+<h3 style="margin-top:.3em">¿Por qué IIII?</h3>
+<p class="note">Muchos relojes antiguos escriben el cuatro como IIII. Una tradición lo atribuye al rey Carlos V de Francia (1364), a quien no le gustaba el IV. Compruébalo en la torre municipal.</p>`);
+
+/* ===== III · Alrededores ===== */
+add(3, `${fig('cerro-tren','Meseta del cerro Hatun Circa o Cerro Tren','', '100%')}
+<div class="band"><div class="num">CAPÍTULO III</div><h2>Alrededores</h2><p>A menos de 10 km de la plaza: miradores, cuevas funerarias y un bosque.</p></div>`, 'opener');
+
+add(3, `<h3 class="c-fe">Sobre la ciudad</h3>
+<h2>Mirador Cotorumi</h2>
+${fig('cotorumi','Mirador del cerro Cotorumi con la gran cruz blanca','Réplica de la Cruz de Succha en el mirador','13em')}
+<p><b>Cotorumi</b> es el cerro de la piedra blanca. De su cantera salieron las veredas, los zócalos, el Puente Colón y el enchapado de la iglesia. También la piedra roja de la Virgen del atrio.</p>
+<p>Arriba, la gran cruz recuerda la de carrizo hallada en 1549. Sube al atardecer: desde aquí se ve toda la ciudad y la explanada de la misa.</p>
+<p class="note">En la tradición, en los cerros Illapa, San Isidro, Cotorumi y Chupicallpa se plantaron cuatro cruces en gratitud por el hallazgo.</p>
+<span class="chip c-fe">Fe</span>`);
+
+add(3, `<h3 class="c-hist">Parque municipal</h3>
+<h2>Llacta Sapuy</h2>
+<p>Fue un asentamiento indígena, una <i>llacta</i>. Según el autor local, el 10 de noviembre de 1532 una avanzada de Francisco Pizarro llegó aquí para capturar a su cacique, cuatro días antes de que la hueste entrara a Cajamarca.</p>
+<p>A fines del siglo XIX fue un fundo de caña para aguardiente y chancaca. Hoy pertenece a la Municipalidad Provincial: tiene vivero forestal, juegos y un mini zoológico.</p>
+<div class="two">${fig('guacamayo','Guacamayo rojo posado en una vara','Guacamayo','8em')}${fig('pavo-real','Pavo real en el parque','Pavo real','8em')}</div>
+<p class="note">Buen plan para familias con niños mientras esperan el día de la misa.</p>
+<span class="chip c-hist">Historia</span>`);
+
+add(3, `<h3 class="c-arq">A 4,5 km · caserío Atumpampa</h3>
+<h2>Cerro Hatun Circa, el Cerro Tren</h2>
+${fig('cerro-tren-farallon','Farallones del cerro Hatun Circa','Farallones del cerro','8em')}
+<p>Su nombre quechua significa «cerro alto». Lo llaman Cerro Tren por su lomo largo. En la cima hay pozos tallados en roca para rituales y fragmentos de cerámica en casi un kilómetro de meseta.</p>
+<div class="two" style="grid-template-columns:auto 1fr;align-items:center">
+${fig('reloj-piedra','Reloj de piedra en el cerro Tren','', '5.5em;width:7em')}
+<p class="note">En el farallón este, un <b>reloj de piedra</b>: la sombra del sol marca las 11:00, la misma hora de la misa papal.</p>
+</div>
+<span class="chip c-arq">Arqueología pre inca</span>`);
+
+add(3, `<h3 class="c-arq">A 6–8 km · caserío Barriada Nueva</h3>
+<h2>Las Ventanillas</h2>
+${fig('ventanillas','Nichos funerarios de Las Ventanillas en la roca','Más de 50 nichos en los acantilados','9em')}
+<p>Más de cincuenta cavidades, pequeñas y grandes, construidas con barro, piedra y paja en los acantilados. Fueron cementerios (<i>ayawantuy</i>) asociados al cerro Hatun Circa, a un kilómetro de distancia.</p>
+<p class="note">Están en propiedad privada y muy dañadas por huaqueros. Visita con guía local, no muevas piedras ni restos, y no subas a los nichos.</p>
+<span class="chip c-arq">Arqueología</span>`);
+
+add(3, `<h3 class="c-nat">A 9 km · caserío Platanar</h3>
+<h2>Bosque, catarata y cañón del Chancay</h2>
+${fig('platanar-catarata','Catarata entre rocas en el bosque de Platanar','Catarata Pac Chac','8em')}
+<p>Un bosque natural con la catarata Pac Chac, la cueva de los Murciélagos y el puente Priana, un arco de piedra natural sobre el cañón del río Chancay. Cuentan que por aquí entraron las tropas del inca Túpac Yupanqui.</p>
+<div class="kv"><b>Cómo llegar</b><span>Carretera a Chota hasta el km 7,5; luego 1,5 km afirmado hasta Platanar.</span><b>A pie</b><span>30 a 40 minutos por caminos de herradura a cada punto.</span></div>
+<div class="two">${fig('mariposa','Mariposa sobre flores anaranjadas','', '5em')}${fig('canon-chancay','Cañón del río Chancay','', '5em')}</div>`);
+
+/* ===== IV · La provincia ===== */
+add(4, `<figure style="position:absolute;inset:0;background:#fff"><img src="${IMG('mapa-circuito')}" alt="Mapa del circuito turístico de la provincia" style="object-fit:contain;padding:1em 1em 9em"></figure>
+<div class="band"><div class="num">CAPÍTULO IV</div><h2>La provincia</h2><p>Once distritos, de los 285 a los 3 600 metros de altitud.</p></div>`, 'opener');
+
+add(4, `<h3 class="c-nat">Distrito de Chancay Baños · 1 625 m</h3>
+<h2>Aguas termales y la pampa de Montán</h2>
+${fig('chancay','Complejo de baños termales de Chancay Baños','Complejo termal: dos piscinas y 27 pozos individuales','8.5em')}
+<p>Las aguas brotan de una falla geológica a 35–40 °C. Se usan para dolores óseos y musculares. Están dentro de la Zona Reservada de Chancay Baños (2 628 ha).</p>
+<p>Cerca están las pampas de <b>Montanmayo</b>, donde el 26 de julio de 1882 las tropas del general Miguel Iglesias enfrentaron a una columna chilena. Allí firmó el Grito de Montán.</p>
+<p class="note">Fiesta de San Antonio de Padua: 2 al 16 de junio.</p>`);
+
+add(4, `<h3 class="c-nat">Distrito de Ninabamba</h3>
+<h2>Las grutas de Ushcupishgo</h2>
+<div class="two">${fig('gruta-laguna','Laguna turquesa dentro de la gruta','Laguna turquesa en la gruta','9.5em')}${fig('gruta-ingreso','Ingreso a la gruta de Ushcupishgo','Ingreso a la gruta','9.5em')}</div>
+<p>Galerías subterráneas con lagunas turquesas. Según la tradición local, las visitaron Alexander von Humboldt (1802) y Antonio Raimondi (1868).</p>
+<ul><li>El Tragadero o Boca del Diablo, donde el río se hunde en la roca.</li><li>La laguna Santa Lucía, de aguas verde turquesa.</li><li>El Pozo del Inca, en el cerro Tacamache.</li></ul>
+<p class="note">Entra solo con guía, linterna y casco. Fiesta del Señor de los Milagros: 13 al 15 de setiembre.</p>`);
+
+add(4, `<h3 class="c-nat">Distrito de Sexi · 2 495 m</h3>
+<h2>Piedra Chamana, el bosque de piedra</h2>
+<div class="two">${fig('bosque-petrificado','Tronco petrificado en Piedra Chamana','Tronco fósil','11em')}${fig('sexi-catedral','Formación rocosa La Catedral','La Catedral','11em')}</div>
+<p>Troncos de árboles convertidos en piedra. Entre 1995 y 1997 lo estudiaron San Marcos, la Agraria La Molina y el INC. Fue declarado Patrimonio Cultural de la Nación el 15 de abril de 1997.</p>
+<p class="note">No hay en el Perú otra zona de fósiles vegetales de esta extensión. Llévate solo fotos. En Sexi también tejen los sombreros de paja que verás en las ferias.</p>`);
+
+add(4, `<h3 class="c-arq">Distrito de Catache · Udima</h3>
+<h2>Poro Poro y los bosques de neblina</h2>
+${fig('poro-poro-2','Piedra tallada con pocitos en Poro Poro','Altares de piedra con canales en Poro Poro','8em')}
+<p>El arqueólogo Walter Alva describe Poro Poro como uno de los grandes santuarios del culto al agua del país: altares de piedra, patios ceremoniales y canales subterráneos.</p>
+<p>Lo rodea el <b>Refugio de Vida Silvestre Bosques Nublados de Udima</b> (12 183,20 ha): 41 plantas y 11 aves endémicas. De estos bosques nace parte del agua que llega a Chiclayo.</p>
+<p class="note">Catache celebra a San Agustín del 29 al 31 de agosto.</p>`);
+
+add(4, `<h3 class="c-fe">Pulán, Uticyacu y Andabamba</h3>
+<h2>Cataratas, santuarios y cruces</h2>
+<div class="two">${fig('chorro-blanco','Catarata Chorro Blanco en Pulán','Catarata Chorro Blanco, Pulán','7em')}${fig('cristo-uticyacu','Cristo Redentor de Uticyacu','Cristo Redentor, Uticyacu','7em')}</div>
+<ul>
+<li><b>Pulán</b>, «distrito de las cataratas». En el caserío Liscan, la Virgen de los Remedios, aparecida hace más de 400 años en un puquio. Los fieles se llevan su agua.</li>
+<li><b>Uticyacu</b> celebra la Cruz de Jarromayo, hallada en 1934. Tiene Cristo Redentor, ventanillas y cataratas.</li>
+<li><b>Andabamba</b> guarda el convento Jesús Verbo y Víctima, fundado en 1977.</li>
+</ul>`);
+
+/* ===== V · El viajero ===== */
+add(5, `${fig('sombreros','Sombreros de paja de colores en una feria','', '100%')}
+<div class="band"><div class="num">CAPÍTULO V</div><h2>El viajero</h2><p>Fiestas, caminos, palabras y una lista para no olvidar nada.</p></div>`, 'opener');
+
+add(5, `<h3 class="c-fe">Calendario</h3>
+<h2>Fiestas patronales de la provincia</h2>
+<table class="cal">
+<tr><td>3.er jue. ene.</td><td>Yauyucán · Corpus Christi</td></tr>
+<tr><td>2–16 jun</td><td>Chancay Baños · San Antonio de Padua</td></tr>
+<tr><td>1–3 jul</td><td>Andabamba · Señor de los Milagros</td></tr>
+<tr><td>9–11 jul</td><td>La Esperanza · Señor de la Buena Esperanza</td></tr>
+<tr><td>16–18 jul</td><td>Saucepampa · Señor del Gran Poder</td></tr>
+<tr><td>9–11 ago</td><td>Pulán · Santa Rosa</td></tr>
+<tr><td>29–31 ago</td><td>Catache · San Agustín</td></tr>
+<tr><td>13–15 set</td><td>Ninabamba · Señor de los Milagros</td></tr>
+<tr><td>22–24 set</td><td>Uticyacu · Cruz de Jarromayo</td></tr>
+<tr><td>27 set–2 oct</td><td>Santa Cruz · Señor del Costado</td></tr>
+<tr class="hl"><td>14 nov</td><td><b>Visita del Papa León XIV</b></td></tr>
+<tr class="hl"><td>15–27 nov</td><td>Sexi · Santa Rosa de Lima</td></tr>
+<tr class="hl"><td>17–21 nov</td><td>Liscan, Pulán · Virgen de los Remedios</td></tr>
+</table>
+<p class="note">Fechas según el Atlas Arqueológico de M. Centurión Burga; confirma cada año con la parroquia o el municipio.</p>`);
+
+add(5, `<h3>Cómo llegar</h3>
+<h2>Tres caminos a Santa Cruz</h2>
+<div class="kv" style="gap:.6em .9em">
+<b>≈ 4 h</b><span><b>Desde Chiclayo</b><br>Chiclayo · puente Cumbil · Santa Cruz. La ruta más directa desde la costa.</span>
+<b>≈ 4 h</b><span><b>Desde Cajamarca</b><br>Cajamarca · El Empalme · Catilluc · Tongod · Santa Cruz.</span>
+<b>≈ 5 h</b><span><b>Por Chota</b><br>Cajamarca · Hualgayoc · Chota · Lajas · Santa Cruz.</span>
+</div>
+<h3 style="margin-top:.5em">El día de la misa</h3>
+<ul>
+<li>Llega uno o dos días antes. Se esperan más de 100 000 personas en una provincia de 35 000.</li>
+<li>Los vecinos están habilitando sus casas como hospedaje: reserva con anticipación.</li>
+<li>Sigue los accesos y horarios que anuncien las autoridades y la diócesis de Chiclayo.</li>
+</ul>
+<p class="note">Tiempos aproximados según Andina. Noviembre es inicio de lluvias en la sierra: revisa el estado de la vía antes de salir.</p>`);
+
+add(5, `<h3>Lista del peregrino</h3>
+<h2>Lo que conviene llevar</h2>
+<ul class="check" id="check">
+<li><label><input type="checkbox" data-k="dni"><span>DNI o pasaporte</span></label></li>
+<li><label><input type="checkbox" data-k="poncho"><span>Poncho impermeable o casaca para lluvia</span></label></li>
+<li><label><input type="checkbox" data-k="sol"><span>Sombrero y bloqueador: a 2 035 m el sol quema aunque esté nublado</span></label></li>
+<li><label><input type="checkbox" data-k="agua"><span>Agua y algo de comer para varias horas</span></label></li>
+<li><label><input type="checkbox" data-k="zap"><span>Zapatos cerrados y cómodos</span></label></li>
+<li><label><input type="checkbox" data-k="banco"><span>Banquito plegable o manta para esperar</span></label></li>
+<li><label><input type="checkbox" data-k="bat"><span>Celular cargado y batería externa</span></label></li>
+<li><label><input type="checkbox" data-k="punto"><span>Un punto de reencuentro acordado con tu grupo</span></label></li>
+<li><label><input type="checkbox" data-k="efect"><span>Efectivo en monedas y billetes pequeños</span></label></li>
+<li><label><input type="checkbox" data-k="med"><span>Tus medicinas personales</span></label></li>
+</ul>
+<p class="note" id="check-st" style="margin-top:auto">0 de 10 listos. Tus marcas se guardan solo en este dispositivo.</p>`);
+
+add(5, `<h3 class="c-hist">Pequeño glosario</h3>
+<h2>Palabras de esta tierra</h2>
+<dl class="gl">
+<dt>Succha</dt><dd>Carrizo. Da nombre a la cruz y a la ciudad.</dd>
+<dt>Bamba</dt><dd>Pampa, llanura.</dd>
+<dt>Hatun</dt><dd>Alto, grande. <i>Hatun Circa</i>: cerro alto.</dd>
+<dt>Llacta</dt><dd>Pueblo. <i>Llacta Sapuy</i>.</dd>
+<dt>Ayawantuy</dt><dd>Lugar de los muertos, cementerio.</dd>
+<dt>Huaranga</dt><dd>Unidad andina de unas mil familias tributarias.</dd>
+<dt>Pachaca</dt><dd>Unidad de unas cien familias.</dd>
+<dt>Apu</dt><dd>Señor; espíritu protector del cerro.</dd>
+<dt>Calicanto</dt><dd>Argamasa de cal, huevo y miel.</dd>
+<dt>Cruceño</dt><dd>Natural de Santa Cruz.</dd>
+</dl>`);
+
+add(5, `<h3>Créditos</h3>
+<h2>Fuentes de esta guía</h2>
+<p class="note" style="font-size:.82em">Textos de historia, atractivos, fiestas y fotografías: Lic. Mario Centurión Burga, <i>Atlas Arqueológico</i> de la provincia de Santa Cruz, <i>Distrito de Santa Cruz</i> (2017) y <i>José del Carmen</i> (2025). Derechos reservados del autor.</p>
+<p class="note" style="font-size:.82em">Programa de la visita: El Peruano, programa oficial del 11 al 16 de noviembre de 2026. Datos de la misa, aforo y accesos: Andina, Infobae, El Comercio, La República y RCR (setiembre de 2026).</p>
+<p class="note" style="font-size:.82em"><b>Diseño y edición:</b> QORI Soluciones, productos y soluciones digitales. <i>Qori</i> significa «oro» en quechua.</p>
+<p class="note" style="font-size:.82em">Algunas fotos del atlas provienen de archivos comunitarios. Las fechas y horarios pueden cambiar; confírmalos en canales oficiales antes de viajar.</p>
+${fig('tejidos','Tejidos de colores colgados en una feria','', '7.5em')}`);
+
+add(5, `<h3>Notas del viaje</h3>
+<h2>Para escribir lo que viviste</h2>
+<p class="note">Un espacio en blanco, como en todo buen cuaderno de viaje.</p>
+<div style="flex:1;background:repeating-linear-gradient(180deg,transparent 0 1.7em,var(--linea) 1.7em calc(1.7em + 1px));margin-top:.4em"></div>`);
+
+/* Contraportada */
+add(0, `<img src="${IMG('cotorumi')}" alt="Cruz del mirador Cotorumi">
+<div class="in" style="justify-content:flex-end;gap:1em">
+  <div class="t" style="font-size:1.6em">Santa Cruz te espera</div>
+  <p style="color:#E9EEF3">«He aquí la verdadera imagen de la Santa Cruz.»<br><small style="letter-spacing:.12em">ECCE SANCTA CRUCIS VERA EFIGIES</small></p>
+  <div class="k">Santa Cruz de Succhabamba · 2 035 m s. n. m.</div>
+  <div class="k" style="border-top:1px solid rgba(232,182,64,.6);padding-top:.7em;color:#E8B640">Una publicación de QORI Soluciones</div>
+</div>`, 'cover');
+
+/* ---------- Motor del libro ---------- */
+const N = P.length;               // número de páginas (par)
+const book = document.getElementById('book');
+const status = document.getElementById('status');
+let single = false, cur = 0, flipped = 0, leaves = [];
+
+const chStart = CH.map((_,i)=>P.findIndex(p=>p.ch===i));
+const chEnd = i => { const nx = chStart.slice(i+1).find(x=>x>0); return (nx ?? N-1) - 1; };
+
+function pageHTML(i){
+  const p = P[i];
+  if (p.cls==='cover') return `<div class="pg cover">${p.html}</div>`;
+  const left = i%2===1;
+  const rh = p.cls==='opener' ? '' : `<div class="rh"><span>${left?'La Ruta del Papa León XIV':''}</span><span>${left?'':CH[p.ch]}</span></div>`;
+  return `<div class="pg ${p.cls}">${rh}${p.html}<div class="folio">${i}</div></div>`;
+}
+
+function build(){
+  book.innerHTML=''; leaves=[];
+  book.classList.toggle('single', single);
+  if (single){
+    const d=document.createElement('div'); d.className='sp'; book.appendChild(d);
+  } else {
+    for (let k=0;k<N/2;k++){
+      const lf=document.createElement('div'); lf.className='leaf';
+      lf.innerHTML=`<div class="face front">${pageHTML(2*k)}</div><div class="face back">${pageHTML(2*k+1)}</div>`;
+      book.appendChild(lf); leaves.push(lf);
+    }
+  }
+  ['l','r'].forEach(s=>{const b=document.createElement('button');b.className='hit '+s;b.type='button';b.tabIndex=-1;
+    b.setAttribute('aria-label',s==='l'?'Página anterior':'Página siguiente');b.onclick=()=>s==='l'?prev():next();book.appendChild(b);});
+  render(true);
+}
+
+function zFix(){ leaves.forEach((lf,k)=>{ lf.style.zIndex = k<flipped ? k+1 : N - k; }); }
+
+function render(instant, dir){
+  if (single){
+    const sp=book.querySelector('.sp'); sp.className='sp'+(dir<0?' from-left':''); void sp.offsetWidth;
+    sp.innerHTML=pageHTML(cur); sp.className='sp'+(dir<0?' from-left':'');
+    if(!instant){ sp.style.animation='none'; void sp.offsetWidth; sp.style.animation=''; }
+    book.classList.remove('closed-front','closed-back');
+  } else {
+    flipped = Math.min(N/2, Math.floor((cur+1)/2));
+    leaves.forEach((lf,k)=>{
+      const want = k<flipped;
+      if (lf.classList.contains('flipped')!==want){
+        if(!instant){ lf.classList.add('moving'); lf.style.zIndex = 1000; setTimeout(()=>{lf.classList.remove('moving');zFix();}, 860); }
+        lf.classList.toggle('flipped', want);
+      }
+    });
+    if (instant) zFix();
+    book.classList.toggle('closed-front', flipped===0);
+    book.classList.toggle('closed-back', flipped===N/2);
+  }
+  wire(); updateUI();
+}
+
+function visible(){
+  if (single) return [cur];
+  const L = 2*flipped-1, R = 2*flipped;
+  return [L,R].filter(x=>x>=0 && x<N);
+}
+function updateUI(){
+  const v = visible();
+  const ch = P[v[v.length-1]].ch || (v.length>1?P[v[0]].ch:0);
+  let txt;
+  if (v[0]===0 && v.length===1) txt='Portada';
+  else if (v[v.length-1]===N-1 && v.length===1) txt='Contraportada';
+  else txt = `Pág. <b>${v.join('–')}</b> de ${N-1}`;
+  status.innerHTML = txt + (ch?` · ${CH[ch].split(' · ')[1]}`:'');
+  document.getElementById('b-prev').disabled = document.getElementById('b-first').disabled = cur===0;
+  const atEnd = single ? cur===N-1 : flipped===N/2;
+  document.getElementById('b-next').disabled = document.getElementById('b-last').disabled = atEnd;
+  document.querySelectorAll('#rail button').forEach((b,i)=>{
+    const c=i+1, s=chStart[c], e=chEnd(c), last=v[v.length-1];
+    const f = last<s?0: last>=e?100: Math.round((last-s+1)/(e-s+1)*100);
+    b.style.setProperty('--fill', f+'%'); b.setAttribute('aria-current', (P[last]?.ch===c)?'true':'false');
+  });
+}
+
+function go(i,dir){ i=Math.max(0,Math.min(N-1,i)); if(!single && i>0 && i<N-1 && i%2===1) i+=1; if(i===cur) return; const d=dir??(i>cur?1:-1); cur=i; render(false,d); }
+function next(){ single ? go(cur+1,1) : go(Math.min(N-1, 2*(flipped+1)),1); }
+function prev(){ single ? go(cur-1,-1) : go(Math.max(0, 2*(flipped-1)),-1); }
+
+/* Índice dentro del libro: se reconstruye en cada render porque las caras se regeneran en modo simple */
+function tocHTML(){
+  const desc=['','Programa, la explanada, Prevost y Santa Cruz','Leyenda, patrón, historia y paseo a pie','Cotorumi, Cerro Tren, Ventanillas, Platanar','Chancay Baños, Ninabamba, Sexi, Catache, Pulán','Fiestas, caminos, lista y glosario'];
+  return CH.slice(1).map((c,j)=>{const i=j+1;return `<li><button type="button" data-go="${chStart[i]}"><span class="n">${['I','II','III','IV','V'][j]}</span><span>${c.split(' · ')[1]}</span><span class="p">${chStart[i]}</span><span class="s">${desc[i]}</span></button></li>`}).join('');
+}
+function wire(){
+  book.querySelectorAll('#toc-list').forEach(ul=>{ if(!ul.dataset.ok){ ul.innerHTML=tocHTML(); ul.dataset.ok=1; } });
+  book.querySelectorAll('[data-go]').forEach(b=>{ b.onclick=e=>{e.stopPropagation(); go(+b.dataset.go);} });
+  book.querySelectorAll('#check input').forEach(cb=>{
+    try{ cb.checked = localStorage.getItem('chk-'+cb.dataset.k)==='1'; }catch(e){}
+    cb.onchange=()=>{ try{localStorage.setItem('chk-'+cb.dataset.k, cb.checked?'1':'0');}catch(e){} countChk(); };
+  }); countChk();
+}
+function countChk(){ const all=[...book.querySelectorAll('#check input')]; if(!all.length) return;
+  const n=all.filter(x=>x.checked).length; const st=book.querySelector('#check-st'); if(st) st.textContent=`${n} de ${all.length} listos. Tus marcas se guardan solo en este dispositivo.`; }
+
+/* Barra de capítulos */
+const rail=document.getElementById('rail');
+CH.slice(1).forEach((c,j)=>{const i=j+1;const b=document.createElement('button');b.type='button';
+  b.style.setProperty('--w', chEnd(i)-chStart[i]+1);b.innerHTML=`<i></i><span>${c}</span>`;b.title=c;b.onclick=()=>go(chStart[i]);rail.appendChild(b);});
+
+/* Tamaño */
+function size(force){
+  const st=document.getElementById('stage').getBoundingClientRect();
+  const W=st.width-8, H=st.height-12;
+  const wantSingle = userSingle ?? (W<760);
+  const ratio = wantSingle ? 0.62 : 0.72;
+  document.documentElement.style.setProperty('--fd', wantSingle?26:29);
+  let pw = wantSingle ? Math.min(W, H*ratio) : Math.min(W/2, H*ratio);
+  pw=Math.max(240,Math.floor(pw));
+  document.documentElement.style.setProperty('--pw', pw+'px');
+  document.documentElement.style.setProperty('--ph', Math.floor(pw/ratio)+'px');
+  if (wantSingle!==single || force){ single=wantSingle; if(!single && cur%2===1) cur+=1; build(); }
+  document.getElementById('b-mode').setAttribute('aria-pressed', single?'true':'false');
+  document.getElementById('b-mode').textContent = single?'Página doble':'Página simple';
+}
+let userSingle=null;
+document.getElementById('b-mode').onclick=()=>{ userSingle=!single; size(); };
+window.addEventListener('resize',()=>size());
+
+/* Entrada */
+document.getElementById('b-next').onclick=next;
+document.getElementById('b-prev').onclick=prev;
+document.getElementById('b-first').onclick=()=>go(0);
+document.getElementById('b-last').onclick=()=>go(N-1);
+document.getElementById('b-toc').onclick=()=>go(2);
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input')) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){next();e.preventDefault();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault();}
+  else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(N-1);}
+});
+let tx=null,ty=null;
+document.getElementById('stage').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+document.getElementById('stage').addEventListener('touchend',e=>{ if(tx===null) return; const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)) (dx<0?next:prev)(); tx=null; },{passive:true});
+
+/* Pista de uso, una sola vez */
+const hint=document.getElementById('hint');
+let seen=false; try{seen=localStorage.getItem('hint-libro')==='1'}catch(e){}
+if(!seen) hint.hidden=false;
+document.getElementById('hint-ok').onclick=()=>{hint.hidden=true;try{localStorage.setItem('hint-libro','1')}catch(e){}};
+
+/* Enlace directo a capítulo: libro.html#cap3 */
+const m=(location.hash||'').match(/^#cap([1-5])$/);
+size(true);
+if(m){ cur = chStart[+m[1]]; render(true); }
+
+/* Descarga del PDF (capacidad "downloads" del visor; si no está disponible, el botón no aparece) */
+(async()=>{
+  const btn=document.getElementById('b-pdf'), toast=document.getElementById('toast');
+  const say=t=>{toast.textContent=t;toast.hidden=false;clearTimeout(say.t);say.t=setTimeout(()=>toast.hidden=true,3500);};
+  let dl=null; try{ dl = window.claude?.use ? await window.claude.use('downloads') : null; }catch(e){}
+  if(!dl) return;
+  btn.hidden=false;
+  btn.onclick=async()=>{
+    btn.disabled=true; const t=btn.textContent; btn.textContent='Preparando…';
+    try{
+      const r=await fetch('Guia-Ruta-del-Papa-Leon-XIV-Santa-Cruz.pdf'); if(!r.ok) throw {code:'fetch'};
+      await dl.save({filename:'Guia-Ruta-del-Papa-Leon-XIV-Santa-Cruz.pdf', data:await r.blob()});
+      say('Listo: el PDF se guardó en tu dispositivo.');
+    }catch(e){
+      const c=e&&e.code;
+      say(c==='declined'?'Descarga cancelada.': c==='rate_limited'?'Ya hay una descarga en curso; espera un momento.':'No se pudo descargar el PDF en esta vista.');
+      if(c==='unavailable'||c==='not_granted') btn.hidden=true;
+    }finally{ btn.disabled=false; btn.textContent=t; }
+  };
+})();
+</script>
+</body>
+</html>
