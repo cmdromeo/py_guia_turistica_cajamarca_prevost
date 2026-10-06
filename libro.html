@@ -153,6 +153,10 @@ table.cal tr.hl td{background:rgba(184,134,11,.12)}
 .gl{display:grid;grid-template-columns:auto 1fr;gap:.3em .8em;font-size:.88em}
 .gl dt{font-family:var(--f-display);font-weight:700;color:var(--teja)}
 .gl dd{margin:0}
+.diario{flex:1;display:flex;flex-direction:column;justify-content:space-between;margin-top:.3em}
+.diario .campo{display:flex;align-items:flex-end;gap:.5em;font-family:var(--f-util);font-size:.8em;letter-spacing:.08em;text-transform:uppercase;color:var(--jalca);white-space:nowrap}
+.diario .campo i{flex:1;border-bottom:1px solid #8E9DAD;height:1.4em}
+.diario .renglon{display:block;border-bottom:1px solid #8E9DAD;height:1.6em}
 
 /* Controles inferiores */
 .dock{padding-block:8px 12px;display:flex;flex-direction:column;gap:8px;align-items:center}
@@ -523,14 +527,19 @@ add(5, `<h3>Créditos</h3>
 <h2>Fuentes de esta guía</h2>
 <p class="note" style="font-size:.82em">Textos de historia, atractivos, fiestas y fotografías: Lic. Mario Centurión Burga, <i>Atlas Arqueológico</i> de la provincia de Santa Cruz, <i>Distrito de Santa Cruz</i> (2017) y <i>José del Carmen</i> (2025). Derechos reservados del autor.</p>
 <p class="note" style="font-size:.82em">Programa de la visita: El Peruano, programa oficial del 11 al 16 de noviembre de 2026. Datos de la misa, aforo y accesos: Andina, Infobae, El Comercio, La República y RCR (setiembre de 2026).</p>
-<p class="note" style="font-size:.82em"><b>Diseño y edición:</b> QORI Soluciones, productos y soluciones digitales. <i>Qori</i> significa «oro» en quechua.</p>
+<p class="note" style="font-size:.82em"><b>Diseño y edición:</b> Gladys Madeleine ROJAS CANGAHUALA y Roxi Fiorella OCHOA GARCIA · QORI Soluciones.</p>
 <p class="note" style="font-size:.82em">Algunas fotos del atlas provienen de archivos comunitarios. Las fechas y horarios pueden cambiar; confírmalos en canales oficiales antes de viajar.</p>
 ${fig('tejidos','Tejidos de colores colgados en una feria','', '7.5em')}`);
 
 add(5, `<h3>Notas del viaje</h3>
 <h2>Para escribir lo que viviste</h2>
-<p class="note">Un espacio en blanco, como en todo buen cuaderno de viaje.</p>
-<div style="flex:1;background:repeating-linear-gradient(180deg,transparent 0 1.7em,var(--linea) 1.7em calc(1.7em + 1px));margin-top:.4em"></div>`);
+<p class="note">Cuenta con tus palabras cómo viviste la visita del Papa y tu paso por Santa Cruz.</p>
+<div class="diario">
+  <div class="campo"><span>Fecha</span><i></i></div>
+  <div class="campo"><span>Viajé con</span><i></i></div>
+  <div class="campo"><span>Lo que más me emocionó</span><i></i></div>
+  ${'<i class="renglon"></i>'.repeat(12)}
+</div>`);
 
 /* Contraportada */
 add(0, `<img src="${IMG('cotorumi')}" alt="Cruz del mirador Cotorumi">
